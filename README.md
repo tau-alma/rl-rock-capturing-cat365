@@ -91,11 +91,14 @@ tensorboard --logdir results/excavator365-RockCapturing
 
 ## Visuals
 
+You can convert *.webm to a GIF using ffmpeg in Linux:
+```bash
+sudo apt install ffmpeg
+ffmpeg -i Video_Sample_Rock_Capturing.webm -vf "scale=640:-1:flags=lanczos" -c:v gif Video_Sample_Rock_Capturing.gif
+```
 Below is a sample video demonstrating the rock capturing process:
 
-<video src="media/Video_Sample_Rock_Capturing.webm" controls width="600">
-  Your browser does not support the video tag.
-</video>
+![Rock Capturing Demo](media/Video_Sample_Rock_Capturing.gif)
 
 ## Contributing
 

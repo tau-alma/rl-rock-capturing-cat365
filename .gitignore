@@ -1,2 +1,8 @@
 __pycache__/
 *.pyc
+*.zip
+*.csv
+*.npz
+*.png
+event.*
+events.*

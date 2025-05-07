@@ -20,9 +20,10 @@ project/
 ├── agxGym/                        # Gym environment and simulation wrappers
 │   ├── envs/                      # Custom environments (excavator, wheelloader, etc.)
 │   ├── models/                    # Simulation models (terrain, agents, sensors)
-│   └── baselines_utils.py        # RL utility functions and wrappers
-├── excavator365_RockCapturing.py   # Main training script
+│   └── baselines_utils.py         # RL utility functions and wrappers
+├── excavator365_RockCapturing.py  # Main training script
 ├── run_env.py                     # Manual control script for testing environment
+├── media/                         # A sample video to show the rock capturing task using CAT365
 ├── results/                       # TensorBoard logs and training results
 ├── Others/                        # Old plots, policies, reward function notes
 ├── plot_training_data.py          # Script to plot training metrics

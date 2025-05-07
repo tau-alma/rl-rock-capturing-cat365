@@ -37,12 +37,15 @@ project/
 - Logging with TensorBoard and performance monitoring
 - Support for training reproducibility and evaluation
 
-## Requirements
+## System Requirements
 
-- Python 3.10
-- Conda 
+- Operating System: Ubuntu 22.04 (Linux)
+- CPU: Intel Xeon E5-1650 v2 @ 3.50GHz
+- GPU Model: NVIDIA GeForce RTX 4070
+- Python Version: 3.10
+- Conda: Yes (using conda environment for package management) 
 - AGX Dynamics (version: 2.39.0.0)
-- Gymnasium, Stable-Baselines3, NumPy, PyTorch, etc.
+- Libraries: Gymnasium, Stable-Baselines3, NumPy, PyTorch, etc.
 
 ## Getting Started
 

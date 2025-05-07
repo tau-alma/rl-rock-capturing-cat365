@@ -90,7 +90,12 @@ tensorboard --logdir results/excavator365-RockCapturing
 ```
 
 ## Visuals
-We plan to include videos or GIFs of the training and evaluation process. Stay tuned!
+
+Below is a sample video demonstrating the rock capturing process:
+
+<video src="media/Video_Sample_Rock_Capturing.webm" controls width="600">
+  Your browser does not support the video tag.
+</video>
 
 ## Contributing
 

@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 import os 
 
 # Load the CSV
-# df = pd.read_csv("results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-04-09_14-44-46/model_log/progress.csv")
-
 log_dir = "results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-04-30_14-29-36/model_log/"
 csv_path = os.path.join(log_dir, "progress.csv")
 df = pd.read_csv(csv_path)

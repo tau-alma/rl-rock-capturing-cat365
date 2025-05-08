@@ -7,7 +7,7 @@ This project implements Reinforcement Learning (RL) for a rock capturing task us
 
 ## Project Summary
 
-This project integrates **AGX Dynamics** by [Algoryx Simulation AB](https://www.algoryx.se/agx-dynamics/) with reinforcement learning to control a simulated **CAT365 excavator** for the task of **automatic rock capturing**. It uses **Stable-Baselines3** with custom AGX-Gym environments, including terrain and rock assets, to train and evaluate the control policy.
+This project integrates [**AGX Dynamics**](https://www.algoryx.se/agx-dynamics/) by Algoryx Simulation AB with reinforcement learning to control a **CAT365 excavator** model for the task of **automatic rock capturing**. It uses **Stable-Baselines3** with custom AGX-Gym environments, including terrain and rock assets, to train and evaluate the control policy.
 
 ### Key Features
 - Reinforcement learning pipeline built on AGX simulations
@@ -17,21 +17,20 @@ This project integrates **AGX Dynamics** by [Algoryx Simulation AB](https://www.
 
 ### Tested Configuration
 - **OS**: Ubuntu 22.04  
-- **CPU**: Intel Xeon E5-1650 v2 @ 3.50GHz  
+- **CPU**: Intel Xeon E5-1650 v2 
 - **GPU**: NVIDIA GeForce RTX 4070  
 - **Python**: 3.10 (Conda-managed)  
 - **AGX Dynamics**: 2.39.0.0  
 - **Libraries**: Gymnasium, Stable-Baselines3, NumPy, PyTorch, etc.
 
 
-
-## Project Overview
+<!-- ## Project Overview
 
 - **Simulator**: [AGX Dynamics](https://www.algoryx.se/agx-dynamics/) by Algoryx Simulation AB
 - **Excavator Model**: Excavator CAT365
 - **Control Algorithm**: Reinforcement Learning (Stable-Baselines3)
 - **Task**: Automatic rock capturing
-- **Environment**: Custom AGX-Gym environment with excavator, terrain and rock assets
+- **Environment**: Custom AGX-Gym environment with excavator, terrain and rock assets -->
 
 ## Repository Structure
 
@@ -58,7 +57,7 @@ project/
 └── README.md                           # Project overview and instructions
 ```
 
-## Features
+<!-- ## Features
 
 - AGX simulation integration with RL pipeline
 - Reward shaping for efficient rock capturing
@@ -74,7 +73,7 @@ The following configuration was used to develop and test the project:
 - Python Version: 3.10
 - Conda: Yes (using conda environment for package management) 
 - AGX Dynamics (version: 2.39.0.0)
-- Libraries: Gymnasium, Stable-Baselines3, NumPy, PyTorch, etc.
+- Libraries: Gymnasium, Stable-Baselines3, NumPy, PyTorch, etc. -->
 
 ## Usage
 

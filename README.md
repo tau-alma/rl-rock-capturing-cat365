@@ -1,8 +1,6 @@
-# Rock Capturing using excavator based on Reinforcement Learning (RL)
+# Rock Capturing using an excavator based on Reinforcement Learning (RL)
 
-<!-- ## Project Summary -->
-
-This project integrates [**AGX Dynamics**](https://www.algoryx.se/agx-dynamics/) with Reinforcement Learning (RL) to control a **Excavator CAT365** model for the task of **automatic rock capturing**. It uses **Stable-Baselines3** with custom AGX-Gym environments, including terrain and rock assets, to train and evaluate the control policy.
+This project integrates [**AGX Dynamics**](https://www.algoryx.se/agx-dynamics/) with Reinforcement Learning (RL) to control an **Excavator CAT365** model for the task of **automatic rock capturing**. It uses **Stable-Baselines3** with custom AGX-Gym environments, including terrain and rock assets, to train and evaluate the control policy.
 
 ## Key Features
 - Reinforcement learning pipeline built on AGX simulations
@@ -18,14 +16,6 @@ This project integrates [**AGX Dynamics**](https://www.algoryx.se/agx-dynamics/)
 - **AGX Dynamics**: 2.39.0.0  
 - **Libraries**: Gymnasium, Stable-Baselines3, NumPy, PyTorch, etc.
 
-
-<!-- ## Project Overview
-
-- **Simulator**: [AGX Dynamics](https://www.algoryx.se/agx-dynamics/) by Algoryx Simulation AB
-- **Excavator Model**: Excavator CAT365
-- **Control Algorithm**: Reinforcement Learning (Stable-Baselines3)
-- **Task**: Automatic rock capturing
-- **Environment**: Custom AGX-Gym environment with excavator, terrain and rock assets -->
 
 ## Repository Structure
 
@@ -51,24 +41,6 @@ project/
 ├── Rock_Bucket_initial_conditions.ods  # Initial configuration for the bucket, stick, arm
 └── README.md                           # Project overview and instructions
 ```
-
-<!-- ## Features
-
-- AGX simulation integration with RL pipeline
-- Reward shaping for efficient rock capturing
-- Logging with TensorBoard and performance monitoring
-- Support for training reproducibility and evaluation
-
-## System Requirements
-
-The following configuration was used to develop and test the project:
-- Operating System: Ubuntu 22.04 (Linux)
-- CPU: Intel Xeon E5-1650 v2 @ 3.50GHz
-- GPU Model: NVIDIA GeForce RTX 4070
-- Python Version: 3.10
-- Conda: Yes (using conda environment for package management) 
-- AGX Dynamics (version: 2.39.0.0)
-- Libraries: Gymnasium, Stable-Baselines3, NumPy, PyTorch, etc. -->
 
 ## Usage
 

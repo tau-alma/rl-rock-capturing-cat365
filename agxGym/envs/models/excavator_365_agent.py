@@ -69,37 +69,6 @@ class Excavator365Agent(Excavator365):
         self._ref_body = self.getRigidBody("ChassieBody")
         self._randomize_pose = RandomizePose(self._col, self._ref_body)
         
-        # bucket_angle_min = -0.661
-        # bucket_angle_max = -0.661
-        # stick_angle_min = -0.413
-        # stick_angle_max = -0.413
-        # arm_angle_min = -0.096
-        # arm_angle_max = -0.096
-        
-        # bucket_angle_min = -0.661
-        # bucket_angle_max = -0.661
-        # stick_angle_min = -0.6
-        # stick_angle_max = -0.6
-        # arm_angle_min = -0.096
-        # arm_angle_max = -0.096
-
-
-        # arm = -0.181
-        # stick = -0.797
-        # bucket = -0.671
-        # bucket_angle_min = bucket
-        # bucket_angle_max = bucket
-        # stick_angle_min = stick
-        # stick_angle_max = stick
-        # arm_angle_min = arm
-        # arm_angle_max = arm
-        
-        
-        # self._randomize_pose.add_randomization(bucket_angle_min, bucket_angle_max, ["BucketPrismatic"])
-        # self._randomize_pose.add_randomization(stick_angle_min, stick_angle_max, ["StickPrismatic"])
-        # self._randomize_pose.add_randomization(arm_angle_min, arm_angle_max, ["ArmPrismatic1"])
-        # self._randomize_pose.add_randomization(arm_angle_min, arm_angle_max, ["ArmPrismatic2"])
-        
     def save_transforms(self):
         for rb in self._bodies:
             self._local_transforms.append(rb.getLocalTransform())
@@ -230,7 +199,6 @@ class Excavator365Agent(Excavator365):
         for c in self.arm_prismatics:
             self._set_motor_speed(c, self._max_arm_speed * action[0])
         self._set_motor_speed(self.stick_prismatic, self._max_stick_speed * action[1])
-        # self._set_motor_speed(self.bucket_prismatic, self._max_stick_speed * action[2])
         self._set_motor_speed(self.bucket_prismatic, self._max_bucket_speed * action[2])
         self._set_motor_speed(self.sprocket_hinge(self.Location.LEFT), self._max_track_speed * action[3])
         self._set_motor_speed(self.sprocket_hinge(self.Location.RIGHT), self._max_track_speed * action[4])
@@ -240,7 +208,6 @@ class Excavator365Agent(Excavator365):
         for c in self.arm_prismatics:
             self._set_motor_speed(c, self._max_arm_speed * action[0])
         self._set_motor_speed(self.stick_prismatic, self._max_stick_speed * action[1])
-        # self._set_motor_speed(self.bucket_prismatic, self._max_stick_speed * action[2])
         self._set_motor_speed(self.bucket_prismatic, self._max_bucket_speed * action[2])
 
     def reset(self, pos: agx.Vec3, config: agx.Vec3):

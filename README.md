@@ -1,13 +1,10 @@
-# RL Rock Capturing CAT365
+# Automatic Rock Capturing using excavator based on Reinforcement Learning (RL)
 
-
-# Automatic Rock Capturing using excavator CAT365 based on Reinforcement Learning (RL)
-
-This project implements Reinforcement Learning (RL) for a rock capturing task using the **Excavator CAT365** model in the **AGX Dynamics** simulator. The goal is to develop and evaluate control policies capable of autonomously operating the excavator to capture rocks.
+<!-- This project implements Reinforcement Learning (RL) for a rock capturing task using the **Excavator CAT365** model in the **AGX Dynamics** simulator. The goal is to develop and evaluate control policies capable of autonomously operating the excavator to capture rocks. -->
 
 ## Project Summary
 
-This project integrates [**AGX Dynamics**](https://www.algoryx.se/agx-dynamics/) by Algoryx Simulation AB with reinforcement learning to control a **CAT365 excavator** model for the task of **automatic rock capturing**. It uses **Stable-Baselines3** with custom AGX-Gym environments, including terrain and rock assets, to train and evaluate the control policy.
+This project integrates [**AGX Dynamics**](https://www.algoryx.se/agx-dynamics/) with Reinforcement Learning (RL) to control a **Excavator CAT365** model for the task of **automatic rock capturing**. It uses **Stable-Baselines3** with custom AGX-Gym environments, including terrain and rock assets, to train and evaluate the control policy.
 
 ### Key Features
 - Reinforcement learning pipeline built on AGX simulations

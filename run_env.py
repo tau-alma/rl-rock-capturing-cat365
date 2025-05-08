@@ -56,7 +56,7 @@ def main():
     ap.add_argument("-l", action="store_true", default=False)
     ap.add_argument("--journalRecord", action="store_true", default=False)
     ap.add_argument("--journalConfigPath", default="JournalConfig.json", type=str)
-    ap.add_argument("--nr-episodes", type=int, default=100)
+    ap.add_argument("--nr-episodes", type=int, default=20)
 
     args = vars(ap.parse_args())
 

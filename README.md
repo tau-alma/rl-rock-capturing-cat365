@@ -105,7 +105,7 @@ tensorboard --logdir results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_
 
 ### 6. Test the trained agent
 
-To test the trained agent, run the following command, replacing <path_to_model> with the full path to your saved .zip model:
+To test the trained agent, run the following command, replacing `<path_to_model>` with the full path to your saved `.zip` model:
 
 ```bash
 python excavator365_RockCapturing.py --load <path_to_model>
@@ -125,19 +125,21 @@ To plot the training progress (e.g., rewards), use the provided plotting script:
 python plot_training_data.py
 ```
 
-Note: Inside the `plot_training_data.py script`, make sure to set the correct path for the log directory by modifying the log_dir variable. For example:
+Note: Inside the `plot_training_data.py` script, make sure to set the correct path for the log directory by modifying the `log_dir` variable. For example:
 
 ```bash
 log_dir = "results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-04-30_14-29-36/model_log/"
 ```
 
 ### 8. Plot Evaluation Results
-To visualize the evaluation results of the trained agent, you can run the following script:
+
+To visualize the evaluation results of the trained agent (e.g., rewards, observations and control inputs), you can run the following script:
+
 ```bash
 python plot_evaluation_data.py
 ```
 
-Note: Before running, make sure to update the log_dir inside the plot_evaluation_data.py script to point to the correct evaluation result directory. For example:
+Note: Before running, make sure to update the `log_dir` inside the `plot_evaluation_data.py` script to point to the correct evaluation result directory. For example:
 
 ```bash
 log_dir = "results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-05-06_12-38-50/model_log/eval/"

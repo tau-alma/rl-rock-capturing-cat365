@@ -17,18 +17,35 @@ This project implements Reinforcement Learning (RL) for a rock capturing task us
 
 ```text
 project/
-├── agxGym/                        # Gym environment and simulation wrappers
-│   ├── envs/                      # Custom environments (excavator, wheelloader, etc.)
-│   ├── models/                    # Simulation models (terrain, agents, sensors)
-│   └── baselines_utils.py         # RL utility functions and wrappers
-├── excavator365_RockCapturing.py  # Main training script
-├── run_env.py                     # Manual control script for testing environment
-├── media/                         # A sample video to show the rock capturing task using CAT365
-├── results/                       # TensorBoard logs and training results
-├── Others/                        # Old plots, policies, reward function notes
-├── plot_training_data.py          # Script to plot training metrics
-├── plot_evaluation_data.py        # Script to plot evaluation results
-└── README.md                      # Project description and usage guide
+├── agxGym/                             # Main gym-style environment package
+│   ├── agx_env.py                      # AGX environment setup
+│   ├── baselines_utils.py              # Utilities for RL training and evaluation
+│   ├── envs/                           # Custom environments and models
+│   │   ├── cartpole_env.py             # CartPole environment
+│   │   ├── excavator_env.py            # Excavator environment 
+│   │   ├── pushing_robot_env.py        # Pushing robot environment
+│   │   ├── wheelloader_env.py          # Wheel loader environment
+│   │   ├── models/                     # AGX simulation models (excavator, terrain, etc.)
+│   │   │   ├── bed_truck.py
+│   │   │   ├── contact_sensor.py
+│   │   │   ├── excavator_365_agent.py
+│   │   │   ├── model_utils.py
+│   │   │   ├── rock_pile_utils.py
+│   │   │   ├── terrains.py
+│   │   │   └── wheel_loader_agents.py
+├── environment_rlagx.yml               # Conda environment definition file
+├── excavator365_RockCapturing.py       # Main script to train or test the agent
+├── run_env.py                          # Script to manually run the environment
+├── media/                              # Sample video and media assets for README
+│   └── Video_Sample_Rock_Capturing.webm
+├── Others/                             # Miscellaneous and legacy scripts
+│   ├── AgxRL_Samples/                  # Example scripts for other environments
+│   └── plot_scripts_old/               # Older plotting scripts and visualization tools
+├── plot_training_data.py               # Plot training metrics from log files
+├── plot_evaluation_data.py             # Plot test results
+├── results/                            # Output directory for logs and model checkpoints
+├── Rock_Bucket_initial_conditions.ods  # Initial configuration for bucket, stick, arm
+└── README.md                           # Project overview and instructions
 ```
 
 ## Features
@@ -88,8 +105,6 @@ python excavator365_RockCapturing.py --train
 
 To visualize the training progress, launch TensorBoard with the log directory of your specific training run:
 
-To monitor the training process and visualize the results, you can use TensorBoard:
-
 ```bash
 tensorboard --logdir <path_to_training_run>
 ```
@@ -119,7 +134,7 @@ You can convert webm video file to a GIF using ffmpeg:
 ```bash
 ffmpeg -i Video_Sample_Rock_Capturing.webm -vf "scale=640:-1:flags=lanczos" -c:v gif Video_Sample_Rock_Capturing.gif
 ```
-Below is a sample video demonstrating the rock capturing task using trained PPO agent:
+Below is a sample video demonstrating the automatic rock capturing task using trained PPO agent:
 
 ![Rock Capturing Demo](media/Video_Sample_Rock_Capturing.gif)
 
@@ -155,33 +170,6 @@ We welcome contributions to improve and extend this project! If you'd like to co
 6. **Create a Merge Request (MR)** targeting the main branch.
 
 7. Your MR will be reviewed. Please be responsive to feedback and update your branch as needed.
-
-
-
-
-
-1. **Fork** this repository to your own GitLab account.
-
-2. **Clone** the forked repository to your local machine:
-   ```bash
-   git clone https://gitlab.com/your-username/rl-rock-capturing-cat365.git
-   ```
-3. Create a new branch for your feature or bug fix:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-4. Make your changes and commit them with a clear message:
-   ```bash
-   git add .
-   git commit -m "Add: meaningful description of your change"
-   ```
-5. Push your changes to your fork:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-6. Create a Merge Request (MR) to the main repository on GitLab.
-
-7. Wait for review, and respond to any requested changes.
 
 ## Authors and acknowledgment
 This project is developed and maintained by:

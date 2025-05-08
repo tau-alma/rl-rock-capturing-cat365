@@ -26,25 +26,15 @@ project/
 │   │   ├── pushing_robot_env.py        # Pushing robot environment
 │   │   ├── wheelloader_env.py          # Wheel loader environment
 │   │   ├── models/                     # AGX simulation models (excavator, terrain, etc.)
-│   │   │   ├── bed_truck.py
-│   │   │   ├── contact_sensor.py
-│   │   │   ├── excavator_365_agent.py
-│   │   │   ├── model_utils.py
-│   │   │   ├── rock_pile_utils.py
-│   │   │   ├── terrains.py
-│   │   │   └── wheel_loader_agents.py
 ├── environment_rlagx.yml               # Conda environment definition file
 ├── excavator365_RockCapturing.py       # Main script to train or test the agent
 ├── run_env.py                          # Script to manually run the environment
 ├── media/                              # Sample video and media assets for README
-│   └── Video_Sample_Rock_Capturing.webm
 ├── Others/                             # Miscellaneous and legacy scripts
-│   ├── AgxRL_Samples/                  # Example scripts for other environments
-│   └── plot_scripts_old/               # Older plotting scripts and visualization tools
 ├── plot_training_data.py               # Plot training metrics from log files
 ├── plot_evaluation_data.py             # Plot test results
 ├── results/                            # Output directory for logs and model checkpoints
-├── Rock_Bucket_initial_conditions.ods  # Initial configuration for bucket, stick, arm
+├── Rock_Bucket_initial_conditions.ods  # Initial configuration for the bucket, stick, arm
 └── README.md                           # Project overview and instructions
 ```
 
@@ -121,10 +111,37 @@ To test the trained agent, run the following command, replacing <path_to_model> 
 ```bash
 python excavator365_RockCapturing.py --load <path_to_model>
 ```
+
 For example:
 
 ```bash
 python excavator365_RockCapturing.py --load results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-05-06_16-47-42/model_log/best_model.zip
+```
+
+### 7. Plot Training Data
+
+To plot the training progress (e.g., rewards), use the provided plotting script:
+
+```bash
+python plot_training_data.py
+```
+
+Note: Inside the plot_training_data.py script, make sure to set the correct path for the log directory by modifying the log_dir variable. For example:
+
+```bash
+log_dir = "results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-04-30_14-29-36/model_log/"
+```
+
+### 8. Plot Evaluation Results
+To visualize the evaluation results of the trained agent, you can run the following script:
+```bash
+python plot_evaluation_data.py
+```
+
+Note: Before running, make sure to update the log_dir inside the plot_evaluation_data.py script to point to the correct evaluation result directory. For example:
+
+```bash
+log_dir = "results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-05-06_12-38-50/model_log/eval/"
 ```
 
 ## Visuals

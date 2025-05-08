@@ -40,6 +40,8 @@ project/
 
 ## System Requirements
 
+The following configuration was used to develop and test the project:
+
 - Operating System: Ubuntu 22.04 (Linux)
 - CPU: Intel Xeon E5-1650 v2 @ 3.50GHz
 - GPU Model: NVIDIA GeForce RTX 4070
@@ -79,7 +81,7 @@ python run_env.py
 You can train a PPO againt using:
 
 ```bash
-python excavator365_RockCapturing.py
+python excavator365_RockCapturing.py --train
 ```
 
 ### 5. Monitor Training with TensorBoard
@@ -90,13 +92,26 @@ To monitor the training process and visualize the results, you can use TensorBoa
 tensorboard --logdir results/excavator365-RockCapturing
 ```
 
+### 6. Test the trained agent
+
+To test the trained agent, run the following command, replacing <path_to_model> with the full path to your saved .zip model:
+
+```bash
+python excavator365_RockCapturing.py --load <path_to_model>
+```
+For example:
+
+```bash
+python excavator365_RockCapturing.py --load results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-05-06_16-47-42/model_log/best_model.zip
+```
+
 ## Visuals
 
 You can convert webm video file to a GIF using ffmpeg:
 ```bash
 ffmpeg -i Video_Sample_Rock_Capturing.webm -vf "scale=640:-1:flags=lanczos" -c:v gif Video_Sample_Rock_Capturing.gif
 ```
-Below is a sample video demonstrating the rock capturing process:
+Below is a sample video demonstrating the rock capturing task using trained PPO agent:
 
 ![Rock Capturing Demo](media/Video_Sample_Rock_Capturing.gif)
 

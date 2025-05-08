@@ -50,12 +50,7 @@ class ExcavatorTerrainEnv(AGXGymEnv):
             self,
             excavator_start_position: Tuple[float, float, float] = (1.0, 0.0, 0.0),
             excavator_start_direction: Tuple[float, float, float] = (1.0, 0.0, 0.0),
-            rock_start_position: Tuple[float, float, float] = (-10.0, 0.5, 0.5), # rock 2
-            # rock_start_position: Tuple[float, float, float] = (-10.0, 0.2, 0.5), # rock 2
-            # rock_start_position: Tuple[float, float, float] = (-9.0, 0.0, 0.5), # rock 3
-            # rock_start_position: Tuple[float, float, float] = (-10.0, +0.5, 0.5), # rock 4
-            # rock_start_position: Tuple[float, float, float] = (-10.0, 0.9, 0.5), # rock 5
-            # rock_start_position: Tuple[float, float, float] = (-10.0, 0.5, 0.5), # rock 6
+            rock_start_position: Tuple[float, float, float] = (-10.0, 0.5, 0.5), 
             rock_start_velocity: Tuple[float, float, float] = (0.0, 0.0, 0.0),
             terrain_model: Callable = FlatTerrain,
             terrain_model_kwargs: dict = {},
@@ -69,11 +64,6 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         self._rock_start_velocity = agx.Vec3(*rock_start_velocity)
         self._terrain_model = terrain_model
         self._terrain_model_kwargs = terrain_model_kwargs
-        
-        # self._target_position = np.array([-6.0, 0.0, 2.0])
-        # # self._target_position_2d = np.array([-6.0, 2.0])
-        # self._target_position_1d = np.array([-6.0])
-        # self._target_position_1d_z = np.array([2.0])
         
         self._random_target_position = True
         if self._random_target_position:
@@ -127,11 +117,7 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         mesh_reader = agxIO.MeshReader()
         mesh_reader.readFile(rock_file)
         
-        scale = agx.Vec3(0.001) # rock 2
-        # scale = agx.Vec3(0.0012) # rock 3
-        # scale = agx.Vec3(0.0013) # rock 4
-        # scale = agx.Vec3(0.0008) # rock 5
-        # scale = agx.Vec3(0.001) # rock 6
+        scale = agx.Vec3(0.001) 
         
         vertices = mesh_reader.getVertices()
         scaled_vertices = agx.Vec3Vector()
@@ -216,13 +202,13 @@ class ExcavatorTerrainEnv(AGXGymEnv):
                 content.bodies["Rock"].getGeometries()[0].getMaterial(),
                 terrain.getMaterial(agxTerrain.Terrain.MaterialType_TERRAIN)
             )
-            # print("Additional contact materials")
-            # content.printContactMaterial(cm_pp)
-            # content.printContactMaterial(cm_sp)
-            # content.printContactMaterial(cm_st)
-            # content.printContactMaterial(cm_rp)
-            # content.printContactMaterial(cm_rt)
-            # content.printStats()
+            print("Additional contact materials")
+            content.printContactMaterial(cm_pp)
+            content.printContactMaterial(cm_sp)
+            content.printContactMaterial(cm_st)
+            content.printContactMaterial(cm_rp)
+            content.printContactMaterial(cm_rt)
+            content.printStats()
 
         self._terrain = terrain
         self._excavator = excavator
@@ -340,163 +326,6 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         
         self.app.getSceneDecorator().setEnableLogo(False)
 
-    def _setup_gym_environment_spaces_old(self):
-        o_loader = self._excavator.observe()
-        o_low, o_high = self._excavator.observation_range()
-        a_low, a_high = self._excavator.action_range_bucket_arm_boom()
-
-        ##############################################################
-        # Define the low and high values for the bucket and rock position
-        bucket_position_low = np.array([-20.0, -5.0, -10.0], dtype=np.float64)
-        bucket_position_high = np.array([20.0, 5.0, 10.0], dtype=np.float64)
-        rock_position_low = np.array([-20.0, -5.0, -10.0], dtype=np.float64)
-        rock_position_high = np.array([20.0, 5.0, 10.0], dtype=np.float64)
-        target_position_low = np.array([-20.0, -5.0, -10.0], dtype=np.float64)
-        target_position_high = np.array([20.0, 5.0, 10.0], dtype=np.float64)
-        cabin_angle_low = np.array([-np.pi, -np.pi], dtype=np.float64)
-        cabin_angle_high = np.array([np.pi, np.pi], dtype=np.float64)
-        
-        # Extend the observation space
-        # o_low  = np.concatenate([o_low,  bucket_position_low,  rock_position_low])
-        # o_high = np.concatenate([o_high, bucket_position_high, rock_position_high])
-        # o_low  = np.concatenate([o_low,  bucket_position_low,  rock_position_low,  target_position_low])
-        # o_high = np.concatenate([o_high, bucket_position_high, rock_position_high, target_position_high])
-        o_low  = np.concatenate([o_low,  bucket_position_low,  rock_position_low,  target_position_low, cabin_angle_low])
-        o_high = np.concatenate([o_high, bucket_position_high, rock_position_high, target_position_high, cabin_angle_high])
-        
-        num_bucket_position_obs = 3
-        num_bucket_position_obs = 3
-        num_target_position_obs = 3
-        num_cabin_angle_obs = 2
-        # Number_of_additional_observations = num_bucket_position_obs + num_bucket_position_obs + num_target_position_obs
-        Number_of_additional_observations = num_bucket_position_obs + num_bucket_position_obs + num_target_position_obs + num_cabin_angle_obs
-        ##############################################################
-        
-        observation_space = spaces.Box(
-            low=o_low,
-            high=o_high,
-            shape=(o_loader.shape[0]+Number_of_additional_observations,),
-            dtype=np.float64)
-        
-        action_space = spaces.Box(
-            low=a_low, 
-            high=a_high, 
-            shape=(a_low.shape[0],), dtype=np.float64)
-        return observation_space, action_space
-
-    def _observe_old(self):
-        o_loader = self._excavator.observe()
-        ##############################################################
-        P_bucket_CM_in_World = self._excavator.bucket_body.getCmPosition()
-        P_rock_CM_in_World= self._rock.getCmPosition()
-        Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
-        # o_loader = np.concatenate([o_loader, np.array([P_bucket_CM_in_World.x(),
-        #                                                P_bucket_CM_in_World.y(),
-        #                                                P_bucket_CM_in_World.z(),
-        #                                                P_rock_CM_in_World.x(),
-        #                                                P_rock_CM_in_World.y(),
-        #                                                P_rock_CM_in_World.z()])])
-        # o_loader = np.concatenate([o_loader, np.array([P_bucket_CM_in_World.x(),
-        #                                                P_bucket_CM_in_World.y(),
-        #                                                P_bucket_CM_in_World.z(),
-        #                                                P_rock_CM_in_World.x(),
-        #                                                P_rock_CM_in_World.y(),
-        #                                                P_rock_CM_in_World.z(),
-        #                                                self._target_position[0],
-        #                                                self._target_position[1],
-        #                                                self._target_position[2]])])
-        o_loader = np.concatenate([o_loader, np.array([P_bucket_CM_in_World.x(),
-                                                       P_bucket_CM_in_World.y(),
-                                                       P_bucket_CM_in_World.z(),
-                                                       P_rock_CM_in_World.x(),
-                                                       P_rock_CM_in_World.y(),
-                                                       P_rock_CM_in_World.z(),
-                                                       self._target_position[0],
-                                                       self._target_position[1],
-                                                       self._target_position[2],
-                                                       Euler_Ang_chassie_body_in_World.x(),
-                                                       Euler_Ang_chassie_body_in_World.y()])])
-        ##############################################################
-        o = o_loader
-        
-        ##############################################################
-        truncated = self._truncate()
-        # truncated = False
-        # if self.spec.max_episode_steps is not None:
-        #     truncated = self.episode_step >= self.spec.max_episode_steps
-        ##############################################################
-        terminated = self._terminal()
-        # Return observation, reward, done, info
-        info = {}
-        # Compute success
-        # is_success = terminated  # Success if rock reaches the goal
-        is_success = self._successful_condition()
-        info = {"is_success": is_success}  # Add 'is_success' for success rate calculation
-        ##############################################################
-        r = self._reward()
-        ##############################################################
-        arm_prismatic_angle = self._excavator.arm_prismatics[0].getAngle()
-        arm_prismatic_speed = self._excavator.arm_prismatics[0].getCurrentSpeed()
-        arm_prismatic_force = self._excavator.arm_prismatics[0].getMotor1D().getCurrentForce()
-
-        stick_prismatic_angle = self._excavator.stick_prismatic.getAngle()
-        stick_prismatic_speed = self._excavator.stick_prismatic.getCurrentSpeed()
-        stick_prismatic_force = self._excavator.stick_prismatic.getMotor1D().getCurrentForce()
-
-        bucket_prismatic_angle = self._excavator.bucket_prismatic.getAngle()
-        bucket_prismatic_speed = self._excavator.bucket_prismatic.getCurrentSpeed()
-        bucket_prismatic_force = self._excavator.bucket_prismatic.getMotor1D().getCurrentForce()
-    
-        # Add rock, target, and bucket position to info
-        info["rock_position_x"] = P_rock_CM_in_World.x()
-        info["rock_position_y"] = P_rock_CM_in_World.y()
-        info["rock_position_z"] = P_rock_CM_in_World.z()
-        info["bucket_position_x"] = P_bucket_CM_in_World.x()
-        info["bucket_position_y"] = P_bucket_CM_in_World.y()
-        info["bucket_position_z"] = P_bucket_CM_in_World.z()
-        info["target_position_x"] = self._target_position[0]
-        info["target_position_y"] = self._target_position[1]
-        info["target_position_z"] = self._target_position[2]
-        info["chassie_rotation_x"] = Euler_Ang_chassie_body_in_World.x()
-        info["chassie_rotation_y"] = Euler_Ang_chassie_body_in_World.y()
-        
-        # Add prismatic joint info
-        info["arm_prismatic_angle"] = arm_prismatic_angle
-        info["arm_prismatic_speed"] = arm_prismatic_speed
-        info["arm_prismatic_force"] = arm_prismatic_force
-
-        info["stick_prismatic_angle"] = stick_prismatic_angle
-        info["stick_prismatic_speed"] = stick_prismatic_speed
-        info["stick_prismatic_force"] = stick_prismatic_force
-
-        info["bucket_prismatic_angle"] = bucket_prismatic_angle
-        info["bucket_prismatic_speed"] = bucket_prismatic_speed
-        info["bucket_prismatic_force"] = bucket_prismatic_force
-        
-        # Add reward info
-        info["reward_rock_target_x_axis"] = self._reward_rock_target_x_axis()
-        info["reward_rock_target_z_axis"] = self._reward_rock_target_z_axis() 
-        info["reward_rock_bucket_x_axis"] = self._reward_rock_bucket_x_axis() 
-        info["reward_euler_ang_chassie_body"] = self._reward_euler_ang_chassie_body() 
-        info["reward_control_input"] = self._reward_control_input()
-        info["reward_smoothing_control_input"] = self._reward_smoothing_control_input() 
-        info["reward_terminal_condition"] = self._reward_terminal_condition()
-        
-        # Add condition info
-        info["condition_rock_target_x_axis"] = 1 if self._condition_rock_target_x_axis() else 0
-        info["condition_rock_target_z_axis"] = 1 if self._condition_rock_target_z_axis() else 0
-        info["condition_rock_bucket_x_axis"] = 1 if self._condition_rock_bucket_x_axis() else 0
-        info["condition_euler_ang_chassie_body"] = 1 if self._condition_euler_ang_chassie_body() else 0 
-        info["condition_terminal_condition"] = 1 if self._condition_terminal_condition() else 0
-        
-        # Add action info
-        info["action_arm"] = self._current_action[0]*self._excavator._max_arm_speed if self._current_action is not None else 0
-        info["action_stick"] = self._current_action[1]*self._excavator._max_stick_speed if self._current_action is not None else 0
-        info["action_bucket"] = self._current_action[2]*self._excavator._max_stick_speed if self._current_action is not None else 0
-        # info["action_bucket"] = self._current_action[2]*self._excavator._max_bucket_speed if self._current_action is not None else 0
-        ##############################################################
-        return o, r, terminated, truncated, info
-
     def _set_action(self, action):
         # If keyboard control has been called we ignore any action here
         # since they alreay have been set by the event listeners
@@ -515,286 +344,14 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         self._prev_action = action
         ###################################################################
         self._excavator.set_action_bucket_arm_boom(action)
-
+    
     def _reward_terrain_mass_in_bucket(self):
         ''' How terrain mass is there in the bucket '''
         return self._terrain.getDynamicMass(self._shovel)
 
-    def _reward_old_old(self):
-        # return self._reward_terrain_mass_in_bucket()
-        ##############################################################
-        rock_position = np.array([self._rock.getCmPosition().x(),
-                                  self._rock.getCmPosition().y(),
-                                  self._rock.getCmPosition().z()])
-        rock_position_2d = np.array([self._rock.getCmPosition().x(),
-                                  self._rock.getCmPosition().z()])
-        rock_position_1d = np.array([self._rock.getCmPosition().x()])
-        rock_position_1d_z = np.array([self._rock.getCmPosition().z()])
-        # print(f'Rock position: {rock_position_1d_z}')
-        bucket_position = np.array([self._excavator.bucket_body.getCmPosition().x(),
-                                    self._excavator.bucket_body.getCmPosition().y(),
-                                    self._excavator.bucket_body.getCmPosition().z()])
-        bucket_position_2d = np.array([self._excavator.bucket_body.getCmPosition().x(),
-                                    self._excavator.bucket_body.getCmPosition().z()])
-        bucket_position_1d = np.array([self._excavator.bucket_body.getCmPosition().x()])
-        # print(f'bucket position: {bucket_position_1d}')
-        # target_position_2d = np.array([-7.5, 2.0])
-        # target_position_1d = np.array([-7.5])
-        # offset_z =-0.7
-        Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
-        Euler_Ang_chassie_body_in_World_x = Euler_Ang_chassie_body_in_World.x()
-        Euler_Ang_chassie_body_in_World_y = Euler_Ang_chassie_body_in_World.y()
-        
-        ##############################################################
-        # ---------------- Initialize reward ----------------
-        reward = 0
-
-        ##############################################################
-        # ---------------- Terminal Reward ----------------
-        # rock_terminal_condition = abs(rock_position_1d - target_position_1d) < 0.10
-        # rock_terminal_condition = np.linalg.norm(rock_position_2d - self._target_position_2d, ord=2) < np.exp(-10.0*self._success_rate)+0.5
-        # # print(np.exp(-0.001*self.episode_step)+0.5)
-        # # print("distance",np.linalg.norm(rock_position_2d - target_position_2d, ord=2))
-        # # bucket_terminal_condition = abs(bucket_position_1d - rock_position_1d) < 0.10
-        # # bucket_terminal_condition = np.linalg.norm(bucket_position_2d+[0,offset_z] - rock_position_2d, ord=2) < 0.5
-        # if rock_terminal_condition:
-        #     # Update success count if this is the first time in the episode
-        #     if not hasattr(self, '_success_recorded') or not self._success_recorded:
-        #         self._success_count += 1
-        #         print('success count:',self._success_count)
-        #         self._success_rate = self._success_count / self._episode_count if self._episode_count > 0 else 0.0
-        #         print('success rate:',self._success_rate)
-        #         self._success_recorded = True
-        #     # print(f'Rock position: {rock_position_2d}')
-        #     # print('Rock has been captured @ step:',self.episode_step)
-        #     reward += 3000.0
-        #     return reward     
-        ##############################################################
-        rock_terminal_condition = abs(rock_position_1d - self._target_position_1d) < 0.10
-        rock_terminal_condition_z = abs(rock_position_1d_z - self._target_position_1d_z) < 0.10
-        bucket_terminal_condition = abs(rock_position_1d - bucket_position_1d) < 0.5
-        cabin_terminal_condition = np.abs(Euler_Ang_chassie_body_in_World_x) < 0.1 and np.abs(Euler_Ang_chassie_body_in_World_y) < 0.1
-        if rock_terminal_condition and bucket_terminal_condition and cabin_terminal_condition and rock_terminal_condition_z:
-            time_bonus = 10.0 * (1 - self.episode_step / 1000.0)  # More reward for faster completion
-            reward += 5.0 #+ time_bonus
-            # print('Rock has been captured @ step:',self.episode_step)
-            # return reward
-        ##############################################################
-        # reward += self._reward_error_pos(rock_position_1d, target_position_1d, scale=1.0)
-        # reward += (1.0/1000.0)*self._reward_error_position(rock_position_1d, self._target_position_1d, scale=1.0)
-        
-        
-        reward += self._reward_error_position(rock_position_1d, self._target_position_1d, scale=1.0)
-        # print("rock reward",self._reward_error_position(rock_position_1d, self._target_position_1d, scale=1.0))
-        reward += 0.5*self._reward_error_position(rock_position_1d_z, self._target_position_1d_z, scale=1.0)
-        reward += 0.1*self._reward_error_position(rock_position_1d, bucket_position_1d, scale=1.0)
-        # print("bucket reward",0.1*self._reward_error_position(rock_position_1d, bucket_position_1d, scale=1.0))
-        # print(abs(rock_position_1d - bucket_position_1d))
-        # reward += (1.0/1000.0)*self._reward_error_position(rock_position_1d, bucket_position_1d, scale=1.0)
-        # print("rock_position_1d: ",rock_position_1d)
-        # print("bucket_position_1d: ",bucket_position_1d)
-        # reward += self._reward_error_pos(rock_position_1d, bucket_position_1d, scale=1.0)
-        # print("rock target",self._reward_error_pos(rock_position_1d, target_position_1d, scale=1.0))
-        # reward += self._reward_error_position(rock_position_2d, bucket_position_2d+[0,offset_z], scale=1.0)
-        # print("bucket rock",self._reward_error_pos(rock_position_2d, bucket_position_2d+[0,-0.5], scale=1.0))
-        # print("rock_position_2d: ",rock_position_2d)
-        # print("bucket_position_2d: ",bucket_position_2d+[0,offset_z])
-        # print("erros",np.linalg.norm(bucket_position_2d+[0,offset_z] - rock_position_2d, ord=2))
-        ##############################################################
-        # if bucket_position[2] < 1.0:
-        #     reward += -10.0
-        ##############################################################
-        if self._current_action is not None:
-            control_penalty = (0.1) * (1/1.74) * np.linalg.norm(self._current_action, ord=2)
-        else:
-            control_penalty = 0.0
-        # print('control penalty:',control_penalty)
-        reward -= control_penalty
-        
-        if self._smoothing_penalty is not None:
-            # print('smoothing penalty:',(1.0) * (1/3.47) * self._smoothing_penalty)
-            reward -= (1.0) * (1/3.47) * self._smoothing_penalty
-        
-        if np.abs(Euler_Ang_chassie_body_in_World_x) > 0.1 or np.abs(Euler_Ang_chassie_body_in_World_y) > 0.1:
-            # print("Euler_Ang_chassie_body_in_World_x: ", Euler_Ang_chassie_body_in_World_x)
-            # print("Euler_Ang_chassie_body_in_World_y: ", Euler_Ang_chassie_body_in_World_y)
-            # print('tilt penalty',0.1 * (Euler_Ang_chassie_body_in_World_x**2 + Euler_Ang_chassie_body_in_World_y**2))
-            reward -= 0.1 * (Euler_Ang_chassie_body_in_World_x**2 + Euler_Ang_chassie_body_in_World_y**2)
-    
-        ##############################################################
-        # ---------------- Time Penalty (Encourage Faster Completion) ----------------
-        time_penalty = -1.0/10.0 #-0.001 * self.episode_step  # Small penalty per step
-        # reward += time_penalty
-        # print(f"Time Penalty: {time_penalty:.3f}")
-        ##############################################################
-        # print(f'Reward: {reward:.3f}')
-        
-        return reward
-    
-    def _reward_old(self):
-        reward_rock_target_x_axis = self._reward_rock_target_x_axis()
-        reward_rock_target_z_axis = self._reward_rock_target_z_axis()
-        reward_rock_bucket_x_axis = self._reward_rock_bucket_x_axis()
-        reward_euler_ang_chassie_body = self._reward_euler_ang_chassie_body()
-        reward_control_input = self._reward_control_input()
-        reward_smoothing_control_input = self._reward_smoothing_control_input()
-        reward_terminal_condition = self._reward_terminal_condition()
-        
-        reward = reward_rock_target_x_axis+ \
-                reward_rock_target_z_axis+ \
-                reward_rock_bucket_x_axis+ \
-                reward_euler_ang_chassie_body+ \
-                reward_control_input+ \
-                reward_smoothing_control_input+ \
-                reward_terminal_condition
-        
-        #############################################################
-        # print("rock_in_under_carriage_body: ",self._rock_position_in_under_carriage_body())    
-        # print("bucket_in_under_carriage_body: ",self._bucket_position_in_under_carriage_body())  
-        #############################################################
-        return reward
-    
-    def _terminal_old_old(self):
-        rock_position = np.array([self._rock.getCmPosition().x(),
-                                  self._rock.getCmPosition().y(),
-                                  self._rock.getCmPosition().z()])
-        rock_position_2d = np.array([self._rock.getCmPosition().x(),
-                                  self._rock.getCmPosition().z()])
-        rock_position_1d = np.array([self._rock.getCmPosition().x()])
-        rock_position_1d_z = np.array([self._rock.getCmPosition().z()])
-        
-        bucket_position = np.array([self._excavator.bucket_body.getCmPosition().x(),
-                                    self._excavator.bucket_body.getCmPosition().y(),
-                                    self._excavator.bucket_body.getCmPosition().z()])
-        bucket_position_2d = np.array([self._excavator.bucket_body.getCmPosition().x(),
-                                    self._excavator.bucket_body.getCmPosition().z()])
-        bucket_position_1d = np.array([self._excavator.bucket_body.getCmPosition().x()])
-        
-        Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
-        Euler_Ang_chassie_body_in_World_x = Euler_Ang_chassie_body_in_World.x()
-        Euler_Ang_chassie_body_in_World_y = Euler_Ang_chassie_body_in_World.y()
-        
-        # offset_z = -0.7
-        terminal = False
-        # if abs(self._rock.getCmPosition().z() - 1.5) < 0.05:
-        #     terminal = True
-        
-        rock_terminal_condition = abs(rock_position_1d - self._target_position_1d) < 0.10
-        rock_terminal_condition_z = abs(rock_position_1d_z - self._target_position_1d_z) < 0.10
-        bucket_terminal_condition = abs(rock_position_1d - bucket_position_1d) < 0.5
-        cabin_terminal_condition = np.abs(Euler_Ang_chassie_body_in_World_x) < 0.1 and np.abs(Euler_Ang_chassie_body_in_World_y) < 0.1
-        # rock_terminal_condition = np.linalg.norm(rock_position_2d - self._target_position_2d, ord=2) < np.exp(-10.0*self._success_rate)+0.5
-        # bucket_terminal_condition = np.linalg.norm(bucket_position_2d+[0,offset_z] - rock_position_2d, ord=2) < 0.5
-        # bucket_terminal_condition = abs(bucket_position_1d - rock_position_1d) < 0.10
-        ##############################################################
-        if rock_terminal_condition and bucket_terminal_condition and cabin_terminal_condition and rock_terminal_condition_z:
-            # print('Terminal condition has been reached @ step:',self.episode_step)
-            terminal = False #True
-        return terminal
-    
     def _terminal(self):
         terminal = False 
         return terminal
-    
-    def _truncate_old(self):
-        truncated = False
-        if self.spec.max_episode_steps is not None:
-            truncated = self.episode_step >= self.spec.max_episode_steps
-        
-        rock_position = np.array([self._rock.getCmPosition().x(),
-                                  self._rock.getCmPosition().y(),
-                                  self._rock.getCmPosition().z()])
-        
-        if abs(rock_position[1]) > 1.0:
-            truncated = True
-        if rock_position[0] < -11.0:
-            truncated = True
-        return truncated
-    
-    def _successful_condition(self):
-        successful_condition = False
-        condition_terminal = False
-        condition_max_time = False
-        
-        if self.spec.max_episode_steps is not None:
-            condition_max_time = self.episode_step >= self.spec.max_episode_steps
-        
-        if self._condition_terminal_condition():
-            condition_terminal = True
-            
-        if condition_terminal and condition_max_time:
-            successful_condition = True
-            
-        return successful_condition
-    
-    def _reward_error_position(self, rock_position, target_position, scale=1.0):
-        """
-        Compute a reward based on the exponential decay of the Euclidean distance (L2 norm) 
-        between the rock's position and the target.
-
-        Args:
-            rock_position (np.array): Current position of the rock (x, z).
-            target_position (np.array): Desired target position of the rock (x, z).
-            scale (float): Scaling factor to adjust sensitivity of the decay (higher values decay faster).
-
-        Returns:
-            float: Reward value in range (0,1], where 1 is maximum reward (error = 0).
-        """
-        error = np.linalg.norm(rock_position - target_position, ord=2)  # Euclidean norm (L2)
-        #reward = np.exp(-scale * error)  # Exponential decay
-        reward = 1.0 / (1.0 + error)  # Exponential decay
-        return reward
-    
-    def _reward_rock_target_x_axis(self):
-        rock_position_x = np.array([self._rock.getCmPosition().x()])
-        # r = self._reward_error_position(rock_position_x, self._target_position_1d, scale=1.0)
-        r = -1*(3/13)*np.linalg.norm(rock_position_x - self._target_position_1d, ord=2)**2  # Euclidean norm (L2)
-        return r
-    
-    def _condition_rock_target_x_axis(self):
-        rock_position_x = np.array([self._rock.getCmPosition().x()])
-        condition_rock_target_x_axis = abs(rock_position_x - self._target_position_1d) < 0.10
-        return condition_rock_target_x_axis
-    
-    def _reward_rock_target_z_axis(self):
-        rock_position_z = np.array([self._rock.getCmPosition().z()])
-        # r = 0.5*self._reward_error_position(rock_position_z, self._target_position_1d_z, scale=1.0)
-        r = -0.5*(1/4)*np.linalg.norm(rock_position_z - self._target_position_1d_z, ord=2)**2
-        return r
-    
-    def _condition_rock_target_z_axis(self):
-        rock_position_z = np.array([self._rock.getCmPosition().z()])
-        condition_rock_target_z_axis = abs(rock_position_z - self._target_position_1d_z) < 0.10
-        return condition_rock_target_z_axis
-    
-    def _reward_rock_bucket_x_axis(self):
-        rock_position_x = np.array([self._rock.getCmPosition().x()])
-        bucket_position_x = np.array([self._excavator.bucket_body.getCmPosition().x()])
-        # r = 0.1*self._reward_error_position(rock_position_x, bucket_position_x, scale=1.0)
-        r = -0.1*np.linalg.norm(rock_position_x - bucket_position_x, ord=2)**2
-        return r
-    
-    def _condition_rock_bucket_x_axis(self):
-        rock_position_x = np.array([self._rock.getCmPosition().x()])
-        bucket_position_x = np.array([self._excavator.bucket_body.getCmPosition().x()])
-        condition_rock_bucket_x_axis = abs(rock_position_x - bucket_position_x) < 0.5
-        return condition_rock_bucket_x_axis
-    
-    def _reward_euler_ang_chassie_body(self):        
-        Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
-        Euler_Ang_chassie_body_in_World_x = Euler_Ang_chassie_body_in_World.x()
-        Euler_Ang_chassie_body_in_World_y = Euler_Ang_chassie_body_in_World.y()
-        r = 0
-        if np.abs(Euler_Ang_chassie_body_in_World_x) > 0.1 or np.abs(Euler_Ang_chassie_body_in_World_y) > 0.1:
-            r = -0.1 * (Euler_Ang_chassie_body_in_World_x**2 + Euler_Ang_chassie_body_in_World_y**2)
-        return r
-    
-    def _condition_euler_ang_chassie_body(self):        
-        Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
-        Euler_Ang_chassie_body_in_World_x = Euler_Ang_chassie_body_in_World.x()
-        Euler_Ang_chassie_body_in_World_y = Euler_Ang_chassie_body_in_World.y()
-        condition_euler_ang_chassie_body = np.abs(Euler_Ang_chassie_body_in_World_x) < 0.1 and np.abs(Euler_Ang_chassie_body_in_World_y) < 0.1
-        return condition_euler_ang_chassie_body
     
     def _reward_control_input_without_force(self):
         r = 0
@@ -824,46 +381,6 @@ class ExcavatorTerrainEnv(AGXGymEnv):
             # r = -1.0 * (1/3.47) * self._smoothing_penalty
             r = -1.0 * (1/12) * self._smoothing_penalty**2
         return r
-    
-    def _reward_terminal_condition(self):
-        r = 0
-        rock_terminal_condition_x = self._condition_rock_target_x_axis()
-        rock_terminal_condition_z = self._condition_rock_target_z_axis()
-        bucket_terminal_condition_x = self._condition_rock_bucket_x_axis()
-        Euler_Ang_chassie_body_terminal_condition = self._condition_euler_ang_chassie_body()
-        if rock_terminal_condition_x and rock_terminal_condition_z and bucket_terminal_condition_x and Euler_Ang_chassie_body_terminal_condition:
-            r = 5.0 
-        return r
-    
-    def _condition_terminal_condition(self):
-        rock_terminal_condition_x = self._condition_rock_target_x_axis()
-        rock_terminal_condition_z = self._condition_rock_target_z_axis()
-        bucket_terminal_condition_x = self._condition_rock_bucket_x_axis()
-        Euler_Ang_chassie_body_terminal_condition = self._condition_euler_ang_chassie_body()
-        c = rock_terminal_condition_x and rock_terminal_condition_z and bucket_terminal_condition_x and Euler_Ang_chassie_body_terminal_condition
-        return c
-    
-    def _terminal_with_condition(self):
-        terminal = False 
-        if self._condition_terminal_condition_2():
-            terminal = True 
-        return terminal
-    
-    def _successful_condition_2_without_time(self):
-        successful_condition = False
-        condition_terminal = False
-        
-        if self._condition_terminal_condition_2():
-            condition_terminal = True
-            
-        if condition_terminal:
-            successful_condition = True
-            
-        return successful_condition
-    
-    
-    
-    
     
     
     def _setup_gym_environment_spaces(self):
@@ -1123,7 +640,6 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         
         return c
     
-    
     def _euler_ang_in_under_carriage_body(self):
         Euler_Ang_under_carriage_body_in_World = self._excavator.under_carriage_body.getRotation().getAsEulerAngles()
         # Euler_Ang_under_carriage_body_in_World_x = Euler_Ang_under_carriage_body_in_World.x()
@@ -1148,20 +664,11 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         bucket_position_in_under_carriage_body = T_under_carriage_body_in_World_inv.transformPoint(bucket_position_in_World)
         return bucket_position_in_under_carriage_body
     
-    
     def _bucket_transformation_in_under_carriage_body(self):
         T_under_carriage_body_in_World_inv = self._excavator.under_carriage_body.getTransform().inverse()
         T_bucket_in_World = self._excavator.bucket_body.getCmTransform()
         T_bucket_in_under_carriage_body = T_bucket_in_World * T_under_carriage_body_in_World_inv
         return T_bucket_in_under_carriage_body
-    
-    def _condition_bucket_prismatic_angle(self):
-        c = False
-        bucket_prismatic_angle = self._excavator.bucket_prismatic.getAngle()
-        if bucket_prismatic_angle >= 0.2:
-            c = True
-        return c
-    
     
     def _generate_random_rock_density(self):
         # not Random
@@ -1254,10 +761,8 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         
         rock_id = random.choice([2, 3])  # randomly pick 2 or 6
         # rock_id = random.randint(2, 6)  # random integer between 2 and 6 (inclusive)
-        # print(f"rock_id: {rock_id}")
         
         rock_file = f"models/convex_stones/convex_rock{rock_id}.obj"
-        
         mesh_reader = agxIO.MeshReader()
         mesh_reader.readFile(rock_file)
         scale = agx.Vec3(0.001) # rock 2
@@ -1282,19 +787,8 @@ class ExcavatorTerrainEnv(AGXGymEnv):
             agxOSG.setDiffuseColor(node, agxRender.Color.Red())
             agxOSG.setAlpha(node, 0.4)
             sim.add(target)
-    
-            
-    def _get_curriculum_threshold(self, progress: float) -> float:
-        """
-        Returns the threshold for success based on progress.
-        
-        :param progress: Float between 0 (start) and 1 (end of training)
-        :return: threshold in meters
-        """
-        start_threshold = 1.0
-        end_threshold = 0.1
-        return start_threshold * (1 - progress) + end_threshold * progress
-
+     
+         
     def heuristic_control_policy(self, t):
         return self._excavator.heuristic_control_policy(t)
 
@@ -1303,3 +797,487 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         if self._excavator.keyboard_controls is None:
             print("Enabling keyboard controls")
             self._excavator.keyboard_controls = Excavator365Agent.default_keyboard_settings()
+            
+    
+    # def _get_curriculum_threshold(self, progress: float) -> float:
+    #     """
+    #     Returns the threshold for success based on progress.
+        
+    #     :param progress: Float between 0 (start) and 1 (end of training)
+    #     :return: threshold in meters
+    #     """
+    #     start_threshold = 1.0
+    #     end_threshold = 0.1
+    #     return start_threshold * (1 - progress) + end_threshold * progress
+    
+    # def _condition_bucket_prismatic_angle(self):
+    #     c = False
+    #     bucket_prismatic_angle = self._excavator.bucket_prismatic.getAngle()
+    #     if bucket_prismatic_angle >= 0.2:
+    #         c = True
+    #     return c
+    
+    # def _successful_condition_2_without_time(self):
+    #     successful_condition = False
+    #     condition_terminal = False
+        
+    #     if self._condition_terminal_condition_2():
+    #         condition_terminal = True
+            
+    #     if condition_terminal:
+    #         successful_condition = True
+            
+    #     return successful_condition
+
+    # def _terminal_with_condition(self):
+    #     terminal = False 
+    #     if self._condition_terminal_condition_2():
+    #         terminal = True 
+    #     return terminal
+    
+    # def _condition_terminal_condition(self):
+    #     rock_terminal_condition_x = self._condition_rock_target_x_axis()
+    #     rock_terminal_condition_z = self._condition_rock_target_z_axis()
+    #     bucket_terminal_condition_x = self._condition_rock_bucket_x_axis()
+    #     Euler_Ang_chassie_body_terminal_condition = self._condition_euler_ang_chassie_body()
+    #     c = rock_terminal_condition_x and rock_terminal_condition_z and bucket_terminal_condition_x and Euler_Ang_chassie_body_terminal_condition
+    #     return c
+    
+    # def _reward_terminal_condition(self):
+    #     r = 0
+    #     rock_terminal_condition_x = self._condition_rock_target_x_axis()
+    #     rock_terminal_condition_z = self._condition_rock_target_z_axis()
+    #     bucket_terminal_condition_x = self._condition_rock_bucket_x_axis()
+    #     Euler_Ang_chassie_body_terminal_condition = self._condition_euler_ang_chassie_body()
+    #     if rock_terminal_condition_x and rock_terminal_condition_z and bucket_terminal_condition_x and Euler_Ang_chassie_body_terminal_condition:
+    #         r = 5.0 
+    #     return r
+    
+    # def _condition_euler_ang_chassie_body(self):        
+    #     Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
+    #     Euler_Ang_chassie_body_in_World_x = Euler_Ang_chassie_body_in_World.x()
+    #     Euler_Ang_chassie_body_in_World_y = Euler_Ang_chassie_body_in_World.y()
+    #     condition_euler_ang_chassie_body = np.abs(Euler_Ang_chassie_body_in_World_x) < 0.1 and np.abs(Euler_Ang_chassie_body_in_World_y) < 0.1
+    #     return condition_euler_ang_chassie_body
+    
+    # def _condition_rock_bucket_x_axis(self):
+    #     rock_position_x = np.array([self._rock.getCmPosition().x()])
+    #     bucket_position_x = np.array([self._excavator.bucket_body.getCmPosition().x()])
+    #     condition_rock_bucket_x_axis = abs(rock_position_x - bucket_position_x) < 0.5
+    #     return condition_rock_bucket_x_axis
+    
+    # def _reward_euler_ang_chassie_body(self):        
+    #     Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
+    #     Euler_Ang_chassie_body_in_World_x = Euler_Ang_chassie_body_in_World.x()
+    #     Euler_Ang_chassie_body_in_World_y = Euler_Ang_chassie_body_in_World.y()
+    #     r = 0
+    #     if np.abs(Euler_Ang_chassie_body_in_World_x) > 0.1 or np.abs(Euler_Ang_chassie_body_in_World_y) > 0.1:
+    #         r = -0.1 * (Euler_Ang_chassie_body_in_World_x**2 + Euler_Ang_chassie_body_in_World_y**2)
+    #     return r
+    
+    # def _condition_rock_target_z_axis(self):
+    #     rock_position_z = np.array([self._rock.getCmPosition().z()])
+    #     condition_rock_target_z_axis = abs(rock_position_z - self._target_position_1d_z) < 0.10
+    #     return condition_rock_target_z_axis
+    
+    # def _reward_rock_bucket_x_axis(self):
+    #     rock_position_x = np.array([self._rock.getCmPosition().x()])
+    #     bucket_position_x = np.array([self._excavator.bucket_body.getCmPosition().x()])
+    #     # r = 0.1*self._reward_error_position(rock_position_x, bucket_position_x, scale=1.0)
+    #     r = -0.1*np.linalg.norm(rock_position_x - bucket_position_x, ord=2)**2
+    #     return r
+    
+    # def _condition_rock_target_x_axis(self):
+    #     rock_position_x = np.array([self._rock.getCmPosition().x()])
+    #     condition_rock_target_x_axis = abs(rock_position_x - self._target_position_1d) < 0.10
+    #     return condition_rock_target_x_axis
+    
+    # def _reward_rock_target_z_axis(self):
+    #     rock_position_z = np.array([self._rock.getCmPosition().z()])
+    #     # r = 0.5*self._reward_error_position(rock_position_z, self._target_position_1d_z, scale=1.0)
+    #     r = -0.5*(1/4)*np.linalg.norm(rock_position_z - self._target_position_1d_z, ord=2)**2
+    #     return r
+    
+    # def _reward_rock_target_x_axis(self):
+    #     rock_position_x = np.array([self._rock.getCmPosition().x()])
+    #     # r = self._reward_error_position(rock_position_x, self._target_position_1d, scale=1.0)
+    #     r = -1*(3/13)*np.linalg.norm(rock_position_x - self._target_position_1d, ord=2)**2  # Euclidean norm (L2)
+    #     return r
+    
+    # def _reward_error_position(self, rock_position, target_position, scale=1.0):
+    #     """
+    #     Compute a reward based on the exponential decay of the Euclidean distance (L2 norm) 
+    #     between the rock's position and the target.
+
+    #     Args:
+    #         rock_position (np.array): Current position of the rock (x, z).
+    #         target_position (np.array): Desired target position of the rock (x, z).
+    #         scale (float): Scaling factor to adjust sensitivity of the decay (higher values decay faster).
+
+    #     Returns:
+    #         float: Reward value in range (0,1], where 1 is maximum reward (error = 0).
+    #     """
+    #     error = np.linalg.norm(rock_position - target_position, ord=2)  # Euclidean norm (L2)
+    #     #reward = np.exp(-scale * error)  # Exponential decay
+    #     reward = 1.0 / (1.0 + error)  # Exponential decay
+    #     return reward
+    
+    # def _successful_condition(self):
+    #     successful_condition = False
+    #     condition_terminal = False
+    #     condition_max_time = False
+        
+    #     if self.spec.max_episode_steps is not None:
+    #         condition_max_time = self.episode_step >= self.spec.max_episode_steps
+        
+    #     if self._condition_terminal_condition():
+    #         condition_terminal = True
+            
+    #     if condition_terminal and condition_max_time:
+    #         successful_condition = True
+            
+    #     return successful_condition
+    
+    # def _truncate_old(self):
+    #     truncated = False
+    #     if self.spec.max_episode_steps is not None:
+    #         truncated = self.episode_step >= self.spec.max_episode_steps
+        
+    #     rock_position = np.array([self._rock.getCmPosition().x(),
+    #                               self._rock.getCmPosition().y(),
+    #                               self._rock.getCmPosition().z()])
+        
+    #     if abs(rock_position[1]) > 1.0:
+    #         truncated = True
+    #     if rock_position[0] < -11.0:
+    #         truncated = True
+    #     return truncated
+    
+    # def _reward_old_old(self):
+    #     # return self._reward_terrain_mass_in_bucket()
+    #     ##############################################################
+    #     rock_position = np.array([self._rock.getCmPosition().x(),
+    #                                 self._rock.getCmPosition().y(),
+    #                                 self._rock.getCmPosition().z()])
+    #     rock_position_2d = np.array([self._rock.getCmPosition().x(),
+    #                                 self._rock.getCmPosition().z()])
+    #     rock_position_1d = np.array([self._rock.getCmPosition().x()])
+    #     rock_position_1d_z = np.array([self._rock.getCmPosition().z()])
+    #     # print(f'Rock position: {rock_position_1d_z}')
+    #     bucket_position = np.array([self._excavator.bucket_body.getCmPosition().x(),
+    #                                 self._excavator.bucket_body.getCmPosition().y(),
+    #                                 self._excavator.bucket_body.getCmPosition().z()])
+    #     bucket_position_2d = np.array([self._excavator.bucket_body.getCmPosition().x(),
+    #                                 self._excavator.bucket_body.getCmPosition().z()])
+    #     bucket_position_1d = np.array([self._excavator.bucket_body.getCmPosition().x()])
+    #     # print(f'bucket position: {bucket_position_1d}')
+    #     # target_position_2d = np.array([-7.5, 2.0])
+    #     # target_position_1d = np.array([-7.5])
+    #     # offset_z =-0.7
+    #     Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
+    #     Euler_Ang_chassie_body_in_World_x = Euler_Ang_chassie_body_in_World.x()
+    #     Euler_Ang_chassie_body_in_World_y = Euler_Ang_chassie_body_in_World.y()
+        
+    #     ##############################################################
+    #     # ---------------- Initialize reward ----------------
+    #     reward = 0
+
+    #     ##############################################################
+    #     # ---------------- Terminal Reward ----------------
+    #     # rock_terminal_condition = abs(rock_position_1d - target_position_1d) < 0.10
+    #     # rock_terminal_condition = np.linalg.norm(rock_position_2d - self._target_position_2d, ord=2) < np.exp(-10.0*self._success_rate)+0.5
+    #     # # print(np.exp(-0.001*self.episode_step)+0.5)
+    #     # # print("distance",np.linalg.norm(rock_position_2d - target_position_2d, ord=2))
+    #     # # bucket_terminal_condition = abs(bucket_position_1d - rock_position_1d) < 0.10
+    #     # # bucket_terminal_condition = np.linalg.norm(bucket_position_2d+[0,offset_z] - rock_position_2d, ord=2) < 0.5
+    #     # if rock_terminal_condition:
+    #     #     # Update success count if this is the first time in the episode
+    #     #     if not hasattr(self, '_success_recorded') or not self._success_recorded:
+    #     #         self._success_count += 1
+    #     #         print('success count:',self._success_count)
+    #     #         self._success_rate = self._success_count / self._episode_count if self._episode_count > 0 else 0.0
+    #     #         print('success rate:',self._success_rate)
+    #     #         self._success_recorded = True
+    #     #     # print(f'Rock position: {rock_position_2d}')
+    #     #     # print('Rock has been captured @ step:',self.episode_step)
+    #     #     reward += 3000.0
+    #     #     return reward     
+    #     ##############################################################
+    #     rock_terminal_condition = abs(rock_position_1d - self._target_position_1d) < 0.10
+    #     rock_terminal_condition_z = abs(rock_position_1d_z - self._target_position_1d_z) < 0.10
+    #     bucket_terminal_condition = abs(rock_position_1d - bucket_position_1d) < 0.5
+    #     cabin_terminal_condition = np.abs(Euler_Ang_chassie_body_in_World_x) < 0.1 and np.abs(Euler_Ang_chassie_body_in_World_y) < 0.1
+    #     if rock_terminal_condition and bucket_terminal_condition and cabin_terminal_condition and rock_terminal_condition_z:
+    #         time_bonus = 10.0 * (1 - self.episode_step / 1000.0)  # More reward for faster completion
+    #         reward += 5.0 #+ time_bonus
+    #         # print('Rock has been captured @ step:',self.episode_step)
+    #         # return reward
+    #     ##############################################################
+    #     # reward += self._reward_error_pos(rock_position_1d, target_position_1d, scale=1.0)
+    #     # reward += (1.0/1000.0)*self._reward_error_position(rock_position_1d, self._target_position_1d, scale=1.0)
+        
+        
+    #     reward += self._reward_error_position(rock_position_1d, self._target_position_1d, scale=1.0)
+    #     # print("rock reward",self._reward_error_position(rock_position_1d, self._target_position_1d, scale=1.0))
+    #     reward += 0.5*self._reward_error_position(rock_position_1d_z, self._target_position_1d_z, scale=1.0)
+    #     reward += 0.1*self._reward_error_position(rock_position_1d, bucket_position_1d, scale=1.0)
+    #     # print("bucket reward",0.1*self._reward_error_position(rock_position_1d, bucket_position_1d, scale=1.0))
+    #     # print(abs(rock_position_1d - bucket_position_1d))
+    #     # reward += (1.0/1000.0)*self._reward_error_position(rock_position_1d, bucket_position_1d, scale=1.0)
+    #     # print("rock_position_1d: ",rock_position_1d)
+    #     # print("bucket_position_1d: ",bucket_position_1d)
+    #     # reward += self._reward_error_pos(rock_position_1d, bucket_position_1d, scale=1.0)
+    #     # print("rock target",self._reward_error_pos(rock_position_1d, target_position_1d, scale=1.0))
+    #     # reward += self._reward_error_position(rock_position_2d, bucket_position_2d+[0,offset_z], scale=1.0)
+    #     # print("bucket rock",self._reward_error_pos(rock_position_2d, bucket_position_2d+[0,-0.5], scale=1.0))
+    #     # print("rock_position_2d: ",rock_position_2d)
+    #     # print("bucket_position_2d: ",bucket_position_2d+[0,offset_z])
+    #     # print("erros",np.linalg.norm(bucket_position_2d+[0,offset_z] - rock_position_2d, ord=2))
+    #     ##############################################################
+    #     # if bucket_position[2] < 1.0:
+    #     #     reward += -10.0
+    #     ##############################################################
+    #     if self._current_action is not None:
+    #         control_penalty = (0.1) * (1/1.74) * np.linalg.norm(self._current_action, ord=2)
+    #     else:
+    #         control_penalty = 0.0
+    #     # print('control penalty:',control_penalty)
+    #     reward -= control_penalty
+        
+    #     if self._smoothing_penalty is not None:
+    #         # print('smoothing penalty:',(1.0) * (1/3.47) * self._smoothing_penalty)
+    #         reward -= (1.0) * (1/3.47) * self._smoothing_penalty
+        
+    #     if np.abs(Euler_Ang_chassie_body_in_World_x) > 0.1 or np.abs(Euler_Ang_chassie_body_in_World_y) > 0.1:
+    #         # print("Euler_Ang_chassie_body_in_World_x: ", Euler_Ang_chassie_body_in_World_x)
+    #         # print("Euler_Ang_chassie_body_in_World_y: ", Euler_Ang_chassie_body_in_World_y)
+    #         # print('tilt penalty',0.1 * (Euler_Ang_chassie_body_in_World_x**2 + Euler_Ang_chassie_body_in_World_y**2))
+    #         reward -= 0.1 * (Euler_Ang_chassie_body_in_World_x**2 + Euler_Ang_chassie_body_in_World_y**2)
+
+    #     ##############################################################
+    #     # ---------------- Time Penalty (Encourage Faster Completion) ----------------
+    #     time_penalty = -1.0/10.0 #-0.001 * self.episode_step  # Small penalty per step
+    #     # reward += time_penalty
+    #     # print(f"Time Penalty: {time_penalty:.3f}")
+    #     ##############################################################
+    #     # print(f'Reward: {reward:.3f}')
+        
+    #     return reward
+    
+    # def _reward_old(self):
+    #     reward_rock_target_x_axis = self._reward_rock_target_x_axis()
+    #     reward_rock_target_z_axis = self._reward_rock_target_z_axis()
+    #     reward_rock_bucket_x_axis = self._reward_rock_bucket_x_axis()
+    #     reward_euler_ang_chassie_body = self._reward_euler_ang_chassie_body()
+    #     reward_control_input = self._reward_control_input()
+    #     reward_smoothing_control_input = self._reward_smoothing_control_input()
+    #     reward_terminal_condition = self._reward_terminal_condition()
+        
+    #     reward = reward_rock_target_x_axis+ \
+    #             reward_rock_target_z_axis+ \
+    #             reward_rock_bucket_x_axis+ \
+    #             reward_euler_ang_chassie_body+ \
+    #             reward_control_input+ \
+    #             reward_smoothing_control_input+ \
+    #             reward_terminal_condition
+        
+    #     #############################################################
+    #     # print("rock_in_under_carriage_body: ",self._rock_position_in_under_carriage_body())    
+    #     # print("bucket_in_under_carriage_body: ",self._bucket_position_in_under_carriage_body())  
+    #     #############################################################
+    #     return reward
+    
+    # def _terminal_old_old(self):
+    #     rock_position = np.array([self._rock.getCmPosition().x(),
+    #                               self._rock.getCmPosition().y(),
+    #                               self._rock.getCmPosition().z()])
+    #     rock_position_2d = np.array([self._rock.getCmPosition().x(),
+    #                               self._rock.getCmPosition().z()])
+    #     rock_position_1d = np.array([self._rock.getCmPosition().x()])
+    #     rock_position_1d_z = np.array([self._rock.getCmPosition().z()])
+        
+    #     bucket_position = np.array([self._excavator.bucket_body.getCmPosition().x(),
+    #                                 self._excavator.bucket_body.getCmPosition().y(),
+    #                                 self._excavator.bucket_body.getCmPosition().z()])
+    #     bucket_position_2d = np.array([self._excavator.bucket_body.getCmPosition().x(),
+    #                                 self._excavator.bucket_body.getCmPosition().z()])
+    #     bucket_position_1d = np.array([self._excavator.bucket_body.getCmPosition().x()])
+        
+    #     Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
+    #     Euler_Ang_chassie_body_in_World_x = Euler_Ang_chassie_body_in_World.x()
+    #     Euler_Ang_chassie_body_in_World_y = Euler_Ang_chassie_body_in_World.y()
+        
+    #     # offset_z = -0.7
+    #     terminal = False
+    #     # if abs(self._rock.getCmPosition().z() - 1.5) < 0.05:
+    #     #     terminal = True
+        
+    #     rock_terminal_condition = abs(rock_position_1d - self._target_position_1d) < 0.10
+    #     rock_terminal_condition_z = abs(rock_position_1d_z - self._target_position_1d_z) < 0.10
+    #     bucket_terminal_condition = abs(rock_position_1d - bucket_position_1d) < 0.5
+    #     cabin_terminal_condition = np.abs(Euler_Ang_chassie_body_in_World_x) < 0.1 and np.abs(Euler_Ang_chassie_body_in_World_y) < 0.1
+    #     # rock_terminal_condition = np.linalg.norm(rock_position_2d - self._target_position_2d, ord=2) < np.exp(-10.0*self._success_rate)+0.5
+    #     # bucket_terminal_condition = np.linalg.norm(bucket_position_2d+[0,offset_z] - rock_position_2d, ord=2) < 0.5
+    #     # bucket_terminal_condition = abs(bucket_position_1d - rock_position_1d) < 0.10
+    #     ##############################################################
+    #     if rock_terminal_condition and bucket_terminal_condition and cabin_terminal_condition and rock_terminal_condition_z:
+    #         # print('Terminal condition has been reached @ step:',self.episode_step)
+    #         terminal = False #True
+    #     return terminal
+    
+    # def _observe_old(self):
+    #     o_loader = self._excavator.observe()
+    #     ##############################################################
+    #     P_bucket_CM_in_World = self._excavator.bucket_body.getCmPosition()
+    #     P_rock_CM_in_World= self._rock.getCmPosition()
+    #     Euler_Ang_chassie_body_in_World = self._excavator.chassie_body.getRotation().getAsEulerAngles()
+    #     # o_loader = np.concatenate([o_loader, np.array([P_bucket_CM_in_World.x(),
+    #     #                                                P_bucket_CM_in_World.y(),
+    #     #                                                P_bucket_CM_in_World.z(),
+    #     #                                                P_rock_CM_in_World.x(),
+    #     #                                                P_rock_CM_in_World.y(),
+    #     #                                                P_rock_CM_in_World.z()])])
+    #     # o_loader = np.concatenate([o_loader, np.array([P_bucket_CM_in_World.x(),
+    #     #                                                P_bucket_CM_in_World.y(),
+    #     #                                                P_bucket_CM_in_World.z(),
+    #     #                                                P_rock_CM_in_World.x(),
+    #     #                                                P_rock_CM_in_World.y(),
+    #     #                                                P_rock_CM_in_World.z(),
+    #     #                                                self._target_position[0],
+    #     #                                                self._target_position[1],
+    #     #                                                self._target_position[2]])])
+    #     o_loader = np.concatenate([o_loader, np.array([P_bucket_CM_in_World.x(),
+    #                                                    P_bucket_CM_in_World.y(),
+    #                                                    P_bucket_CM_in_World.z(),
+    #                                                    P_rock_CM_in_World.x(),
+    #                                                    P_rock_CM_in_World.y(),
+    #                                                    P_rock_CM_in_World.z(),
+    #                                                    self._target_position[0],
+    #                                                    self._target_position[1],
+    #                                                    self._target_position[2],
+    #                                                    Euler_Ang_chassie_body_in_World.x(),
+    #                                                    Euler_Ang_chassie_body_in_World.y()])])
+    #     ##############################################################
+    #     o = o_loader
+        
+    #     ##############################################################
+    #     truncated = self._truncate()
+    #     # truncated = False
+    #     # if self.spec.max_episode_steps is not None:
+    #     #     truncated = self.episode_step >= self.spec.max_episode_steps
+    #     ##############################################################
+    #     terminated = self._terminal()
+    #     # Return observation, reward, done, info
+    #     info = {}
+    #     # Compute success
+    #     # is_success = terminated  # Success if rock reaches the goal
+    #     is_success = self._successful_condition()
+    #     info = {"is_success": is_success}  # Add 'is_success' for success rate calculation
+    #     ##############################################################
+    #     r = self._reward()
+    #     ##############################################################
+    #     arm_prismatic_angle = self._excavator.arm_prismatics[0].getAngle()
+    #     arm_prismatic_speed = self._excavator.arm_prismatics[0].getCurrentSpeed()
+    #     arm_prismatic_force = self._excavator.arm_prismatics[0].getMotor1D().getCurrentForce()
+
+    #     stick_prismatic_angle = self._excavator.stick_prismatic.getAngle()
+    #     stick_prismatic_speed = self._excavator.stick_prismatic.getCurrentSpeed()
+    #     stick_prismatic_force = self._excavator.stick_prismatic.getMotor1D().getCurrentForce()
+
+    #     bucket_prismatic_angle = self._excavator.bucket_prismatic.getAngle()
+    #     bucket_prismatic_speed = self._excavator.bucket_prismatic.getCurrentSpeed()
+    #     bucket_prismatic_force = self._excavator.bucket_prismatic.getMotor1D().getCurrentForce()
+    
+    #     # Add rock, target, and bucket position to info
+    #     info["rock_position_x"] = P_rock_CM_in_World.x()
+    #     info["rock_position_y"] = P_rock_CM_in_World.y()
+    #     info["rock_position_z"] = P_rock_CM_in_World.z()
+    #     info["bucket_position_x"] = P_bucket_CM_in_World.x()
+    #     info["bucket_position_y"] = P_bucket_CM_in_World.y()
+    #     info["bucket_position_z"] = P_bucket_CM_in_World.z()
+    #     info["target_position_x"] = self._target_position[0]
+    #     info["target_position_y"] = self._target_position[1]
+    #     info["target_position_z"] = self._target_position[2]
+    #     info["chassie_rotation_x"] = Euler_Ang_chassie_body_in_World.x()
+    #     info["chassie_rotation_y"] = Euler_Ang_chassie_body_in_World.y()
+        
+    #     # Add prismatic joint info
+    #     info["arm_prismatic_angle"] = arm_prismatic_angle
+    #     info["arm_prismatic_speed"] = arm_prismatic_speed
+    #     info["arm_prismatic_force"] = arm_prismatic_force
+
+    #     info["stick_prismatic_angle"] = stick_prismatic_angle
+    #     info["stick_prismatic_speed"] = stick_prismatic_speed
+    #     info["stick_prismatic_force"] = stick_prismatic_force
+
+    #     info["bucket_prismatic_angle"] = bucket_prismatic_angle
+    #     info["bucket_prismatic_speed"] = bucket_prismatic_speed
+    #     info["bucket_prismatic_force"] = bucket_prismatic_force
+        
+    #     # Add reward info
+    #     info["reward_rock_target_x_axis"] = self._reward_rock_target_x_axis()
+    #     info["reward_rock_target_z_axis"] = self._reward_rock_target_z_axis() 
+    #     info["reward_rock_bucket_x_axis"] = self._reward_rock_bucket_x_axis() 
+    #     info["reward_euler_ang_chassie_body"] = self._reward_euler_ang_chassie_body() 
+    #     info["reward_control_input"] = self._reward_control_input()
+    #     info["reward_smoothing_control_input"] = self._reward_smoothing_control_input() 
+    #     info["reward_terminal_condition"] = self._reward_terminal_condition()
+        
+    #     # Add condition info
+    #     info["condition_rock_target_x_axis"] = 1 if self._condition_rock_target_x_axis() else 0
+    #     info["condition_rock_target_z_axis"] = 1 if self._condition_rock_target_z_axis() else 0
+    #     info["condition_rock_bucket_x_axis"] = 1 if self._condition_rock_bucket_x_axis() else 0
+    #     info["condition_euler_ang_chassie_body"] = 1 if self._condition_euler_ang_chassie_body() else 0 
+    #     info["condition_terminal_condition"] = 1 if self._condition_terminal_condition() else 0
+        
+    #     # Add action info
+    #     info["action_arm"] = self._current_action[0]*self._excavator._max_arm_speed if self._current_action is not None else 0
+    #     info["action_stick"] = self._current_action[1]*self._excavator._max_stick_speed if self._current_action is not None else 0
+    #     info["action_bucket"] = self._current_action[2]*self._excavator._max_stick_speed if self._current_action is not None else 0
+    #     # info["action_bucket"] = self._current_action[2]*self._excavator._max_bucket_speed if self._current_action is not None else 0
+    #     ##############################################################
+    #     return o, r, terminated, truncated, info
+    
+    # def _setup_gym_environment_spaces_old(self):
+    #     o_loader = self._excavator.observe()
+    #     o_low, o_high = self._excavator.observation_range()
+    #     a_low, a_high = self._excavator.action_range_bucket_arm_boom()
+
+    #     ##############################################################
+    #     # Define the low and high values for the bucket and rock position
+    #     bucket_position_low = np.array([-20.0, -5.0, -10.0], dtype=np.float64)
+    #     bucket_position_high = np.array([20.0, 5.0, 10.0], dtype=np.float64)
+    #     rock_position_low = np.array([-20.0, -5.0, -10.0], dtype=np.float64)
+    #     rock_position_high = np.array([20.0, 5.0, 10.0], dtype=np.float64)
+    #     target_position_low = np.array([-20.0, -5.0, -10.0], dtype=np.float64)
+    #     target_position_high = np.array([20.0, 5.0, 10.0], dtype=np.float64)
+    #     cabin_angle_low = np.array([-np.pi, -np.pi], dtype=np.float64)
+    #     cabin_angle_high = np.array([np.pi, np.pi], dtype=np.float64)
+        
+    #     # Extend the observation space
+    #     # o_low  = np.concatenate([o_low,  bucket_position_low,  rock_position_low])
+    #     # o_high = np.concatenate([o_high, bucket_position_high, rock_position_high])
+    #     # o_low  = np.concatenate([o_low,  bucket_position_low,  rock_position_low,  target_position_low])
+    #     # o_high = np.concatenate([o_high, bucket_position_high, rock_position_high, target_position_high])
+    #     o_low  = np.concatenate([o_low,  bucket_position_low,  rock_position_low,  target_position_low, cabin_angle_low])
+    #     o_high = np.concatenate([o_high, bucket_position_high, rock_position_high, target_position_high, cabin_angle_high])
+        
+    #     num_bucket_position_obs = 3
+    #     num_bucket_position_obs = 3
+    #     num_target_position_obs = 3
+    #     num_cabin_angle_obs = 2
+    #     # Number_of_additional_observations = num_bucket_position_obs + num_bucket_position_obs + num_target_position_obs
+    #     Number_of_additional_observations = num_bucket_position_obs + num_bucket_position_obs + num_target_position_obs + num_cabin_angle_obs
+    #     ##############################################################
+        
+    #     observation_space = spaces.Box(
+    #         low=o_low,
+    #         high=o_high,
+    #         shape=(o_loader.shape[0]+Number_of_additional_observations,),
+    #         dtype=np.float64)
+        
+    #     action_space = spaces.Box(
+    #         low=a_low, 
+    #         high=a_high, 
+    #         shape=(a_low.shape[0],), dtype=np.float64)
+    #     return observation_space, action_space

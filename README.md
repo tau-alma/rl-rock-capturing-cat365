@@ -25,7 +25,7 @@ project/
 │   │   ├── excavator_env.py            # Excavator environment 
 │   │   ├── pushing_robot_env.py        # Pushing robot environment
 │   │   ├── wheelloader_env.py          # Wheel loader environment
-│   │   ├── models/                     # AGX simulation models (excavator, terrain, etc.)
+│   │   └── models/                     # AGX simulation models (excavator, terrain, etc.)
 ├── environment_rlagx.yml               # Conda environment definition file
 ├── excavator365_RockCapturing.py       # Main script to train or test the agent
 ├── run_env.py                          # Script to manually run the environment
@@ -48,7 +48,6 @@ project/
 ## System Requirements
 
 The following configuration was used to develop and test the project:
-
 - Operating System: Ubuntu 22.04 (Linux)
 - CPU: Intel Xeon E5-1650 v2 @ 3.50GHz
 - GPU Model: NVIDIA GeForce RTX 4070
@@ -126,7 +125,7 @@ To plot the training progress (e.g., rewards), use the provided plotting script:
 python plot_training_data.py
 ```
 
-Note: Inside the plot_training_data.py script, make sure to set the correct path for the log directory by modifying the log_dir variable. For example:
+Note: Inside the `plot_training_data.py script`, make sure to set the correct path for the log directory by modifying the log_dir variable. For example:
 
 ```bash
 log_dir = "results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-04-30_14-29-36/model_log/"

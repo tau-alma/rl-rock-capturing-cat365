@@ -133,7 +133,7 @@ log_dir = "results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs
 
 ## Visuals
 
-You can convert webm video file to a GIF using ffmpeg:
+You can convert `.webm` video file to a GIF using ffmpeg:
 
 ```bash
 ffmpeg -i Video_Sample_Rock_Capturing.webm -vf "scale=640:-1:flags=lanczos" -c:v gif Video_Sample_Rock_Capturing.gif

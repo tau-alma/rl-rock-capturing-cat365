@@ -8,14 +8,13 @@ npz_path = os.path.join(log_dir, "evaluation_data.npz")
 data = np.load(npz_path, allow_pickle=True)
 
 
-# data = np.load("results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/2025-04-09_17-12-05/model_log/eval/evaluation_data.npz", allow_pickle=True)
 index_episode = 4  # You can change this to another index if needed
 
 # Create the 'figures' directory if it doesn't exist
 figures_dir = os.path.join(log_dir, "figures")
 os.makedirs(figures_dir, exist_ok=True)
 
-# print(data.files)
+
 # Extract data
 episode_rewards = data["episode_rewards"]  # shape: (num_episodes,)
 episode_rewards_per_timestep = data["episode_rewards_per_timestep"]  # shape: (num_episodes, variable_length) 
@@ -23,7 +22,7 @@ episode_observations = data["episode_observations"]  # shape: (num_episodes, var
 episode_info = data["episode_info"]  # This contains the 'info' dictionaries
 
 
-# --- 1. Cumulative reward per episode ---
+# --- Cumulative reward per episode ---
 plt.figure()
 plt.plot(episode_rewards, marker='o')
 plt.title("Cumulative Reward per Episode")
@@ -37,7 +36,7 @@ save_path = os.path.join(figures_dir, "cumulative_reward_per_episode.png")
 plt.savefig(save_path)
 plt.close()
 
-# --- 2. Reward per timestep for first few episodes ---
+# --- Reward per timestep for first few episodes ---
 plt.figure()
 for i in range(min(5, len(episode_rewards_per_timestep))):  # Plot first 5 episodes max
     plt.plot(episode_rewards_per_timestep[i], label=f"Episode {i+1}")
@@ -51,7 +50,7 @@ save_path = os.path.join(figures_dir, "reward_per_timestep.png")
 plt.savefig(save_path)
 plt.close()
 
-# --- 2.2 Cumulative Reward per timestep for first few episodes ---
+# --- Cumulative Reward per timestep for first few episodes ---
 plt.figure()
 for i in range(min(5, len(episode_rewards_per_timestep))):  # Plot first 5 episodes max
     cumulative_reward = np.cumsum(episode_rewards_per_timestep[i])
@@ -67,8 +66,8 @@ plt.savefig(save_path)
 plt.close()
 
 
-# --- 3. Observation variables over time (for 1 episode) ---
-# Extract data for the first episode
+# --- 3. Observation variables over time (for only 1 episode) ---
+
 rock_positions_x = []
 bucket_positions_x = []
 target_positions_x = []
@@ -116,8 +115,6 @@ for timestep_info in episode_info[index_episode]:
     # print(len(episode_info))
     timestep_data = timestep_info[0]
     
-    # print(type(timestep_data))
-    # print(len(timestep_data))
     
     # Rock, Bucket, and Target Positions
     rock_positions_x.append(timestep_data.get("rock_position_x", np.nan))
@@ -204,7 +201,7 @@ action_bucket = np.array(action_bucket)
 
 # Plotting
 
-# --- 1. Rock, Bucket, and Target Position X ---
+# --- Rock, Bucket, and Target Position X ---
 plt.figure(figsize=(10, 6))
 plt.plot(rock_positions_x, label="Rock Position X")
 plt.plot(bucket_positions_x, label="Bucket Position X")
@@ -219,6 +216,7 @@ save_path = os.path.join(figures_dir, f"position_x_episode_{index_episode + 1}.p
 plt.savefig(save_path)
 plt.close()
 
+# --- Rock, Bucket, and Target Position Z ---
 plt.figure(figsize=(10, 6))
 plt.plot(rock_positions_z, label="Rock Position Z")
 plt.plot(bucket_positions_z, label="Bucket Position Z")
@@ -233,7 +231,7 @@ save_path = os.path.join(figures_dir, f"position_z_episode_{index_episode + 1}.p
 plt.savefig(save_path)
 plt.close()
 
-# # --- 2. Euler Angles (Chassie Rotation) ---
+# # --- Euler Angles (Under Carriage Body) ---
 plt.figure(figsize=(10, 6))
 plt.plot(chassie_rotation_x, label="Under Carriage Body Rotation X")
 plt.plot(chassie_rotation_y, label="Under Carriage Body Rotation Y")
@@ -247,7 +245,7 @@ save_path = os.path.join(figures_dir, f"under_carriage_body_rotation_episode_{in
 plt.savefig(save_path)
 plt.close()
 
-# --- 3. Joint Angles ---
+# --- Joint Angles ---
 plt.figure(figsize=(10, 6))
 plt.plot(arm_prismatic_angles, label="Arm Prismatic Angle")
 plt.plot(stick_prismatic_angles, label="Stick Prismatic Angle")
@@ -262,7 +260,7 @@ save_path = os.path.join(figures_dir, f"joint_angles_episode_{index_episode + 1}
 plt.savefig(save_path)
 plt.close()
 
-# --- 4. Joint Speeds ---
+# --- Joint Speeds (Observations) ---
 plt.figure(figsize=(10, 6))
 plt.plot(arm_prismatic_speeds, label="Arm Prismatic Speed")
 plt.plot(stick_prismatic_speeds, label="Stick Prismatic Speed")
@@ -277,6 +275,7 @@ save_path = os.path.join(figures_dir, f"joint_speeds_observation_episode_{index_
 plt.savefig(save_path)
 plt.close()
 
+# --- Joint Speeds (Control Inputs) ---
 plt.figure(figsize=(10, 6))
 plt.plot(action_arm, label="Action Arm")
 plt.plot(action_stick, label="Action Stick")
@@ -291,7 +290,7 @@ save_path = os.path.join(figures_dir, f"joint_speeds_control_input_episode_{inde
 plt.savefig(save_path)
 plt.close()
 
-# --- 5. Joint Forces ---
+# --- Joint Forces ---
 plt.figure(figsize=(10, 6))
 plt.plot(arm_prismatic_forces, label="Arm Prismatic Force")
 plt.plot(stick_prismatic_forces, label="Stick Prismatic Force")
@@ -306,38 +305,7 @@ save_path = os.path.join(figures_dir, f"joint_forces_episode_{index_episode + 1}
 plt.savefig(save_path)
 plt.close()
 
-# # dt = 1/60  # seconds between timesteps (adjust this to your env’s frame rate)
-
-# # # --- 4 and 5 Compute power per timestep ---
-# # arm_power = np.array(arm_prismatic_forces) * np.array(arm_prismatic_speeds)
-# # stick_power = np.array(stick_prismatic_forces) * np.array(stick_prismatic_speeds)
-# # bucket_power = np.array(bucket_prismatic_forces) * np.array(bucket_prismatic_speeds)
-
-# # # --- Compute cumulative energy (Joules) ---
-# # arm_energy = np.cumsum(arm_power) * dt
-# # stick_energy = np.cumsum(stick_power) * dt
-# # bucket_energy = np.cumsum(bucket_power) * dt
-
-# # print(f"Total energy used by Arm: {arm_energy[-1]:.2f} J")
-# # print(f"Total energy used by Stick: {stick_energy[-1]:.2f} J")
-# # print(f"Total energy used by Bucket: {bucket_energy[-1]:.2f} J")
-
-# # # --- Plot energy over time ---
-# # plt.figure(figsize=(10, 6))
-# # plt.plot(arm_energy, label="Arm Prismatic Energy")
-# # plt.plot(stick_energy, label="Stick Prismatic Energy")
-# # plt.plot(bucket_energy, label="Bucket Prismatic Energy")
-# # plt.title("Cumulative Joint Energy per Timestep (Episode 1)")
-# # plt.xlabel("Timestep")
-# # plt.ylabel("Energy (Joules)")
-# # plt.legend()
-# # plt.grid(True)
-# # plt.tight_layout()
-# # plt.show()
-
-
-
-# --- 6. Reward for Rock Target X Axis ---
+# --- Reward for Rock Target X Axis ---
 plt.figure(figsize=(10, 6))
 plt.plot(reward_rock_target_x_axis, label="Reward Rock Target X Axis")
 plt.title(f"Reward for Rock Target X Axis per Timestep (Episode {index_episode + 1})")
@@ -351,7 +319,7 @@ plt.savefig(save_path)
 plt.close()
 
 
-# --- 7. Reward for Rock Target Z Axis ---
+# --- Reward for Rock Target Z Axis ---
 plt.figure(figsize=(10, 6))
 plt.plot(reward_rock_target_z_axis, label="Reward Rock Target Z Axis")
 plt.title(f"Reward for Rock Target Z Axis per Timestep (Episode {index_episode + 1})")
@@ -365,20 +333,20 @@ plt.savefig(save_path)
 plt.close()
 
 
-# --- 8. Reward for Rock Bucket X Axis ---
-plt.figure(figsize=(10, 6))
-plt.plot(reward_rock_bucket_x_axis, label="Reward Rock Bucket X Axis")
-plt.title(f"Reward for Rock Bucket X Axis per Timestep (Episode {index_episode + 1})")
-plt.xlabel("Timestep")
-plt.ylabel("Reward")
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-save_path = os.path.join(figures_dir, f"reward_rock_bucket_x_axis_episode_{index_episode + 1}.png")
-plt.savefig(save_path)
-plt.close()
+# # --- Reward for Rock Bucket X Axis ---
+# plt.figure(figsize=(10, 6))
+# plt.plot(reward_rock_bucket_x_axis, label="Reward Rock Bucket X Axis")
+# plt.title(f"Reward for Rock Bucket X Axis per Timestep (Episode {index_episode + 1})")
+# plt.xlabel("Timestep")
+# plt.ylabel("Reward")
+# plt.legend()
+# plt.grid(True)
+# plt.tight_layout()
+# save_path = os.path.join(figures_dir, f"reward_rock_bucket_x_axis_episode_{index_episode + 1}.png")
+# plt.savefig(save_path)
+# plt.close()
 
-# --- 9. Reward for Euler Angle Chassie Body ---
+# --- Reward for Euler Angle Under Carriage Body ---
 plt.figure(figsize=(10, 6))
 plt.plot(reward_euler_ang_chassie_body, label="Reward Euler Angle Under Carriage Body")
 plt.title(f"Reward for Euler Angle of Under Carriage Body per Timestep (Episode {index_episode + 1})")
@@ -391,7 +359,7 @@ save_path = os.path.join(figures_dir, f"reward_euler_ang_under_carriage_body_epi
 plt.savefig(save_path)
 plt.close()
 
-# ---10. Reward for Control Input ---
+# --- Reward for Control Input ---
 plt.figure(figsize=(10, 6))
 plt.plot(reward_control_input, label="Reward Control Input")
 plt.title(f"Reward for Control Input per Timestep (Episode {index_episode + 1})")
@@ -404,7 +372,7 @@ save_path = os.path.join(figures_dir, f"reward_control_input_episode_{index_epis
 plt.savefig(save_path)
 plt.close()
 
-# --- 11. Reward for Smoothing Control Input ---
+# --- Reward for Smoothing Control Input ---
 plt.figure(figsize=(10, 6))
 plt.plot(reward_smoothing_control_input, label="Reward Smoothing Control Input")
 plt.title(f"Reward for Smoothing Control Input per Timestep (Episode {index_episode + 1})")
@@ -417,7 +385,7 @@ save_path = os.path.join(figures_dir, f"reward_smoothing_control_input_episode_{
 plt.savefig(save_path)
 plt.close()
 
-# --- 12. Reward for Terminal Condition ---
+# --- Reward for Terminal Condition ---
 plt.figure(figsize=(10, 6))
 plt.plot(reward_terminal_condition, label="Reward Terminal Condition")
 plt.title(f"Reward for Terminal Condition per Timestep (Episode {index_episode + 1})")
@@ -430,7 +398,7 @@ save_path = os.path.join(figures_dir, f"reward_terminal_condition_episode_{index
 plt.savefig(save_path)
 plt.close()
 
-# --- 13. Condition Rock Target X Axis ---
+# --- Condition Rock Target X Axis ---
 plt.figure(figsize=(10, 6))
 plt.plot(condition_rock_target_x_axis, label="Condition Rock Target X Axis")
 plt.title(f"Condition: Rock Target X Axis (Episode {index_episode + 1})")
@@ -443,7 +411,7 @@ save_path = os.path.join(figures_dir, f"condition_rock_target_x_axis_episode_{in
 plt.savefig(save_path)
 plt.close()
 
-# --- 14. Condition Rock Target Z Axis ---
+# --- Condition Rock Target Z Axis ---
 plt.figure(figsize=(10, 6))
 plt.plot(condition_rock_target_z_axis, label="Condition Rock Target Z Axis")
 plt.title(f"Condition: Rock Target Z Axis (Episode {index_episode + 1})")
@@ -456,20 +424,20 @@ save_path = os.path.join(figures_dir, f"condition_rock_target_z_axis_episode_{in
 plt.savefig(save_path)
 plt.close()
 
-# --- 15. Condition Rock Bucket X Axis ---
-plt.figure(figsize=(10, 6))
-plt.plot(condition_rock_bucket_x_axis, label="Condition Rock Bucket X Axis")
-plt.title(f"Condition: Rock Bucket X Axis (Episode {index_episode + 1})")
-plt.xlabel("Timestep")
-plt.ylabel("Condition (0 or 1)")
-plt.legend()
-plt.grid(True)
-plt.tight_layout()
-save_path = os.path.join(figures_dir, f"condition_rock_bucket_x_axis_episode_{index_episode + 1}.png")
-plt.savefig(save_path)
-plt.close()
+# # --- Condition Rock Bucket X Axis ---
+# plt.figure(figsize=(10, 6))
+# plt.plot(condition_rock_bucket_x_axis, label="Condition Rock Bucket X Axis")
+# plt.title(f"Condition: Rock Bucket X Axis (Episode {index_episode + 1})")
+# plt.xlabel("Timestep")
+# plt.ylabel("Condition (0 or 1)")
+# plt.legend()
+# plt.grid(True)
+# plt.tight_layout()
+# save_path = os.path.join(figures_dir, f"condition_rock_bucket_x_axis_episode_{index_episode + 1}.png")
+# plt.savefig(save_path)
+# plt.close()
 
-# --- 16. Condition Euler Angle Chassie Body ---
+# --- Condition Euler Angle Under Carriage Body ---
 plt.figure(figsize=(10, 6))
 plt.plot(condition_euler_ang_chassie_body, label="Condition Euler Angle Under Carriage Body")
 plt.title(f"Condition: Euler Angle of Under Carriage Body (Episode {index_episode + 1})")
@@ -482,7 +450,7 @@ save_path = os.path.join(figures_dir, f"condition_euler_ang_under_carriage_body_
 plt.savefig(save_path)
 plt.close()
 
-# --- 17. Condition Terminal Condition ---
+# --- Condition Terminal Condition ---
 plt.figure(figsize=(10, 6))
 plt.plot(condition_terminal_condition, label="Condition Terminal Condition")
 plt.title(f"Condition: Terminal Condition (Episode {index_episode + 1})")
@@ -516,3 +484,33 @@ plt.close()
 # # Show all plots
 # # plt.show()
 
+
+################# Energy calculation  ######################
+# # dt = 1/60  # seconds between timesteps (adjust this to your env’s frame rate)
+
+# # # --- 4 and 5 Compute power per timestep ---
+# # arm_power = np.array(arm_prismatic_forces) * np.array(arm_prismatic_speeds)
+# # stick_power = np.array(stick_prismatic_forces) * np.array(stick_prismatic_speeds)
+# # bucket_power = np.array(bucket_prismatic_forces) * np.array(bucket_prismatic_speeds)
+
+# # # --- Compute cumulative energy (Joules) ---
+# # arm_energy = np.cumsum(arm_power) * dt
+# # stick_energy = np.cumsum(stick_power) * dt
+# # bucket_energy = np.cumsum(bucket_power) * dt
+
+# # print(f"Total energy used by Arm: {arm_energy[-1]:.2f} J")
+# # print(f"Total energy used by Stick: {stick_energy[-1]:.2f} J")
+# # print(f"Total energy used by Bucket: {bucket_energy[-1]:.2f} J")
+
+# # # --- Plot energy over time ---
+# # plt.figure(figsize=(10, 6))
+# # plt.plot(arm_energy, label="Arm Prismatic Energy")
+# # plt.plot(stick_energy, label="Stick Prismatic Energy")
+# # plt.plot(bucket_energy, label="Bucket Prismatic Energy")
+# # plt.title("Cumulative Joint Energy per Timestep (Episode 1)")
+# # plt.xlabel("Timestep")
+# # plt.ylabel("Energy (Joules)")
+# # plt.legend()
+# # plt.grid(True)
+# # plt.tight_layout()
+# # plt.show()

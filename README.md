@@ -86,10 +86,17 @@ python excavator365_RockCapturing.py --train
 
 ### 5. Monitor Training with TensorBoard
 
+To visualize the training progress, launch TensorBoard with the log directory of your specific training run:
+
 To monitor the training process and visualize the results, you can use TensorBoard:
 
 ```bash
-tensorboard --logdir results/excavator365-RockCapturing
+tensorboard --logdir <path_to_training_run>
+```
+For example:
+
+```bash
+tensorboard --logdir results/excavator365-RockCapturing/hp_lr_0.0003-batch_size_128-epochs_4-entropy_coef_0.0003-update_interval_1024-/
 ```
 
 ### 6. Test the trained agent
@@ -108,6 +115,7 @@ python excavator365_RockCapturing.py --load results/excavator365-RockCapturing/h
 ## Visuals
 
 You can convert webm video file to a GIF using ffmpeg:
+
 ```bash
 ffmpeg -i Video_Sample_Rock_Capturing.webm -vf "scale=640:-1:flags=lanczos" -c:v gif Video_Sample_Rock_Capturing.gif
 ```
@@ -117,7 +125,40 @@ Below is a sample video demonstrating the rock capturing task using trained PPO 
 
 ## Contributing
 
-We welcome contributions to improve and extend this project. To contribute via GitLab, please follow the steps below:
+We welcome contributions to improve and extend this project! If you'd like to contribute via GitLab, follow these steps:
+
+1. **Clone** the repository to your local machine:
+
+   ```bash
+   git clone https://git.algoryx.se/algoryx/external/xscave/rl-rock-capturing-cat365.git
+   ```
+
+2. **Create a new branch** for your feature or fix:
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+3. **Develop** your changes locally. Make sure your code is clean, tested, and well-documented.
+
+4. **Commit** your changes with a clear message:
+
+   ```bash
+   git add .
+   git commit -m "Add: meaningful description of your change"
+   ```
+5. **Push** the branch to GitLab:
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+6. **Create a Merge Request (MR)** targeting the main branch.
+
+7. Your MR will be reviewed. Please be responsive to feedback and update your branch as needed.
+
+
+
+
 
 1. **Fork** this repository to your own GitLab account.
 

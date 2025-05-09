@@ -35,7 +35,7 @@
 
 - [ ] **Test PPO implementation from `skrl` library**
 
-- [ ] **Include previous joint speed command in the observation space**
+- [x] **Include previous joint speed command in the observation space** (`feature/addPrevSpeedCom`)
 
 - [ ] **Design a performance index independent of the reward function and observation space**  
   _Helps objectively compare different methods, observation spaces, and reward functions._

@@ -25,8 +25,8 @@
 
 - [ ] **Include previous joint speed command in the observation space**
 
-- [ ] **Design a reward-independent performance index**  
-  _Helps compare different methods and reward functions objectively._
+- [ ] **Design a performance index independent of the reward function and observation space**  
+  _Helps objectively compare different methods, observation spaces, and reward functions._
 
 - [ ] **Revise reward function and termination conditions**  
   _Increase the positive terminal reward and allow episode termination when the task is complete, rather than using only max episode length._
@@ -38,35 +38,11 @@
 
 - [ ] _(Optional)_ **Try alternative RL algorithms**
 
-## 🧪 Experiments to Run
+## Experiments to Run
 
 - [ ] **Evaluate generalization of trained agent**  
   _Test performance when rock or soil differs from training setup._
 
-## 🔖 Notes
+## Notes
 
 - Use branch naming conventions: `feature/` for new capabilities and `experiment/` for testing variants.
-
-
-
-
-# TODO List 
-
-## Features in Progress
-- [x] Increase control penalty weight (branch: `experiment/increaseControlPenaltyWeight`)
-- [x] Test squash_output in PPO policy (branch: `feature/squash_output`) [Adding the tanh activation function to the output layer of the policy network to generate the control input in the range [-1,1] (in the current implementation, we apply the clip function to the output of the policy network, and then send it to the excavator)]
-- [ ] Test PPO implementation from `skrl` library
-- [ ] Add the previous joint speed command to the observation space
-- [ ] Desig an index independent of the reward function and the observation space to compare the performance of different methods and reward functions
-- [ ] Change the reward function (increasing the terminal reward) and terminate the episode after reaching the desired conditions (in the current implementation, the episode terminates after reaching the maximum episode length)
-- [ ] (optional) Change the randomization settings, for instance, changing the mass distribution, etc.
-- [ ] (optional) Test different structures for policy and value networks
-- [ ] (optional) Test different RL algorithms
-
-## Experiments to Run
-- [ ] Evaluation of a trained agent when the rock or soil is different from the training setup
-
-
-## Notes
-- Use `feature/` or `experiment/` prefixes for new branches.
-- Always push branches for visibility even if not ready to merge.

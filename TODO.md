@@ -2,6 +2,14 @@
 
 ## Features in Progress
 
+- [ ] **Contact between the rock and bucket**  
+  _Clarify whether explicit contact definition is needed. Current simulation includes:_  
+  - `agxTerrain:Terrain::Particle <-> agxTerrain:Terrain::Particle`  
+  - `agxTerrain:Terrain::Particle <-> BucketMaterial`  
+  - `BucketMaterial <-> terrain`  
+  - `agxTerrain:Terrain::Particle <-> Rocks`  
+  - `Rocks <-> terrain`
+
 - [x] **Increase control penalty weight** (`experiment/increaseControlPenaltyWeight`)
 
 - [x] **Test `squash_output` in PPO policy** (`feature/squash_output`)  

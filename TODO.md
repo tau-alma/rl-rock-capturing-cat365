@@ -3,7 +3,7 @@
 ## Features in Progress
 
 - [ ] **Contact between the rock and bucket**  
-  _Clarify whether explicit contact definition is needed. Current simulation includes:_  
+  _Clarify whether explicit contact definition between the rock and the bucket is needed. Current simulation includes:_  
   - `agxTerrain:Terrain::Particle <-> agxTerrain:Terrain::Particle`  
   - `agxTerrain:Terrain::Particle <-> BucketMaterial`  
   - `BucketMaterial <-> terrain`  
@@ -27,7 +27,7 @@
   > For A2C and PPO, continuous actions are clipped during training and testing (to avoid out of bound error).  
   > SAC, DDPG and TD3 squash the action, using a `tanh()` transformation, which handles bounds more correctly.
 
-  _Also, in our current implementation, actions are clipped manually before being sent to the excavator._
+  _Also, in our current implementation, actions are clipped before being sent to the excavator._
 
 - [ ] **Fix bug regarding the initial position of the rock**  
   _When the rock falls from a 0.5-meter height, it sometimes tilts and moves in the y-direction, causing it to go out of the working area of the arm, stick, and bucket (x-z plane)._

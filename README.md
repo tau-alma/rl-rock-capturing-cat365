@@ -142,6 +142,11 @@ Below is a sample video demonstrating the automatic rock capturing task using tr
 
 ![Rock Capturing Demo](media/Video_Sample_Rock_Capturing.gif)
 
+## Project Roadmap & Tasks
+
+For a list of planned features, experimental ideas, and work-in-progress branches, see [TODO.md](TODO.md).
+
+
 ## Contributing
 
 We welcome contributions to improve and extend this project! If you'd like to contribute via GitLab, follow these steps:

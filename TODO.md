@@ -21,6 +21,9 @@
 
   _Also, in our current implementation, actions are clipped manually before being sent to the excavator._
 
+- [ ] **Fix bug regarding the initial position of the rock**  
+  _When the rock falls from a 0.5-meter height, it sometimes tilts and moves in the y-direction, causing it to go out of the working area of the arm, stick, and bucket (x-z plane)._
+
 - [ ] **Test PPO implementation from `skrl` library**
 
 - [ ] **Include previous joint speed command in the observation space**

@@ -22,8 +22,9 @@
   **Purpose**: To ensure that actions lie within the desired bounds when using gSDE (`use_sde=True`).
 
   _From Stable-Baselines3 Docs:_  
-  https://stable-baselines3.readthedocs.io/en/master/guide/custom_policy.html#advanced-example  
-
+  https://stable-baselines3.readthedocs.io/en/master/guide/custom_policy.html#
+  https://github.com/DLR-RM/stable-baselines3/blob/master/stable_baselines3/common/policies.py#L416
+  
   > For A2C and PPO, continuous actions are clipped during training and testing (to avoid out of bound error).  
   > SAC, DDPG and TD3 squash the action, using a `tanh()` transformation, which handles bounds more correctly.
 

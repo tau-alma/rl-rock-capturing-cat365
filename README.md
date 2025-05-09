@@ -39,6 +39,7 @@ project/
 ├── plot_evaluation_data.py             # Plot test results
 ├── results/                            # Output directory for logs and model checkpoints
 ├── Rock_Bucket_initial_conditions.ods  # Initial configuration for the bucket, stick, arm
+├── TODO.md                             # TODO list
 └── README.md                           # Project overview and instructions
 ```
 
@@ -144,7 +145,7 @@ Below is a sample video demonstrating the automatic rock capturing task using tr
 
 ## Project Roadmap & Tasks
 
-For a list of planned features, experimental ideas, and work-in-progress branches, see [TODO.md](TODO.md).
+Check out the [TODO List](TODO.md) for current tasks, experiments, and development progress.
 
 
 ## Contributing

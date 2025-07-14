@@ -184,7 +184,7 @@ def main():
 
     if args["train"]:
         model.learn(
-            total_timesteps=30e6,
+            total_timesteps=15e6,
             callback=[eval_callback, checkpoint_callback])
         
         model.save(os.path.join(model_log_dir, "last"))

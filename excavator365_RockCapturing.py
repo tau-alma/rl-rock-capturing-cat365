@@ -136,13 +136,13 @@ def main():
             n_eval_episodes=10,
             best_model_save_path=model_log_dir,#f"{model_log_dir}/best",
             log_path=eval_log_dir,
-            eval_freq=3000, # 36000 // num_envs,
+            eval_freq=30000, # 36000 // num_envs,
             deterministic=True,
             render=False)
         
         # Save a checkpoint every 3000 time steps
         checkpoint_callback = CheckpointCallback(
-            save_freq=3000, # 36000 // num_envs,
+            save_freq=30000, # 36000 // num_envs,
             save_path=checkpoint_log_dir,
             name_prefix="rl_model",
             save_replay_buffer=True,

@@ -77,7 +77,7 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         self._smoothing_penalty = None
         
         self._random_density_rock = True
-        self._initial_random_rotation_rock = True
+        self._initial_random_rotation_rock = False
         self._random_geometry_rock = True
         
         self._initial_random_position_rock = True

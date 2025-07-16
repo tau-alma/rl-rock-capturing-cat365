@@ -538,6 +538,10 @@ class ExcavatorTerrainEnv(AGXGymEnv):
     
     def _truncate(self):
         rock_position = self._rock_position_in_under_carriage_body()
+        bucket_position = self._bucket_position_in_under_carriage_body()
+        
+        print("rock_position: ", rock_position[1])
+        print("bucket_position: ", bucket_position[1])
         
         truncated = False
         if self.spec.max_episode_steps is not None:
@@ -720,7 +724,7 @@ class ExcavatorTerrainEnv(AGXGymEnv):
     def _generate_random_rock_position(self):
         x_initial = np.random.uniform(-10.5, -7.0)
         # x_initial = np.random.choice(np.arange(-11.0, -7.0 + 0.1, 0.1))
-        p_initial = agx.Vec3(x_initial, 0.5, 0.5)
+        p_initial = agx.Vec3(x_initial, 0.29, 0.5)
         return p_initial
     
     def _generate_excavator_configuration(self, rock_position):
@@ -759,7 +763,7 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         
     def _generate_random_geometry_rock(self):
         
-        rock_id = random.choice([2, 3])  # randomly pick 2 or 6
+        rock_id = random.choice([2, 3, 6])  # randomly pick 2 or 6
         # rock_id = random.randint(2, 6)  # random integer between 2 and 6 (inclusive)
         
         rock_file = f"models/convex_stones/convex_rock{rock_id}.obj"

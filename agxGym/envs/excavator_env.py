@@ -538,10 +538,6 @@ class ExcavatorTerrainEnv(AGXGymEnv):
     
     def _truncate(self):
         rock_position = self._rock_position_in_under_carriage_body()
-        bucket_position = self._bucket_position_in_under_carriage_body()
-        
-        print("rock_position: ", rock_position[1])
-        print("bucket_position: ", bucket_position[1])
         
         truncated = False
         if self.spec.max_episode_steps is not None:

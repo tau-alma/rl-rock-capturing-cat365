@@ -2,7 +2,7 @@
 
 ## Features in Progress
 
-- [x] **Contact between the rock and bucket** (`feature/addingRockBucketContact`)
+- [x] **Contact between the rock and bucket** (`feature/addingRockBucketContact`)  
   _Clarify whether explicit contact definition between the rock and the bucket is needed. Current simulation includes:_  
   - `agxTerrain:Terrain::Particle <-> agxTerrain:Terrain::Particle`  
   - `agxTerrain:Terrain::Particle <-> terrain` 
@@ -50,17 +50,17 @@
 
 - [ ] **Test PPO implementation from `skrl` library**
 
-- [x] **Include previous joint speed command in the observation space** (`feature/addPrevSpeedCom`)
-_No significant improvement observed._
+- [x] **Include previous joint speed command in the observation space** (`feature/addPrevSpeedCom`)  
+  _No significant improvement observed._
 
-- [x] **Exclude joint forces from the observation space and reward function** (`feature/removingForceFromObsAndReward`)
-_Significantly reduces performance._
+- [x] **Exclude joint forces from the observation space and reward function** (`feature/removingForceFromObsAndReward`)  
+  _Significantly reduces performance._
 
 - [ ] **Design a performance index independent of the reward function and observation space**  
   _Helps objectively compare different methods, observation spaces, and reward functions._
   _Success rate is used as an index for comparing different reward functions._
 
-- [] **Revise reward function and termination conditions**  (`feature/rewardFunctionWithTermination`)
+- [ ] **Revise reward function and termination conditions**  (`feature/rewardFunctionWithTermination`)  
   _Increase the positive terminal reward and allow episode termination when the task is complete, rather than using only max episode length._
   _Terminate the episode upon reaching the success condition, where the agent receives a terminal reward of 1750. However, the policy still appears to lack robustness._  
   _Including a "near zero control input" as part of the success condition may slow down learning and increase complexity._

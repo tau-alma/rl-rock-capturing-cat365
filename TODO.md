@@ -45,7 +45,7 @@
   _Also, in our current implementation, actions are clipped before being sent to the excavator._
 
 - [ ] **Fix bug regarding the initial position of the rock**  
-  _When the rock falls from a 0.5-meter height, it sometimes tilts and moves in the y-direction, causing it to go out of the working area of the arm, stick, and bucket (x-z plane)._
+  _When the rock falls from a 0.5-meter height, it sometimes tilts and moves in the y-direction, causing it to go out of the working area of the arm, stick, and bucket (x-z plane)._  
   _The initial random orientation of the rock has been disabled. It now drops in a stable, fixed orientation within the intended workspace._
 
 - [ ] **Test PPO implementation from `skrl` library**
@@ -57,11 +57,11 @@
   _Significantly reduces performance._
 
 - [ ] **Design a performance index independent of the reward function and observation space**  
-  _Helps objectively compare different methods, observation spaces, and reward functions._
+  _Helps objectively compare different methods, observation spaces, and reward functions._  
   _Success rate is used as an index for comparing different reward functions._
 
 - [ ] **Revise reward function and termination conditions**  (`feature/rewardFunctionWithTermination`)  
-  _Increase the positive terminal reward and allow episode termination when the task is complete, rather than using only max episode length._
+  _Increase the positive terminal reward and allow episode termination when the task is complete, rather than using only max episode length._  
   _Terminate the episode upon reaching the success condition, where the agent receives a terminal reward of 1750. However, the policy still appears to lack robustness._  
   _Including a "near zero control input" as part of the success condition may slow down learning and increase complexity._
 

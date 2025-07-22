@@ -33,7 +33,7 @@ class ExcavatorTerrainEnv(AGXGymEnv):
     spec: EnvSpec = EnvSpec(
         id="agx-365-terrain-rock-v0",
         entry_point=None,
-        max_episode_steps=500, # 500 - 360 is ok
+        max_episode_steps=500 - 1, # 500 - 360 is ok
         kwargs={
             "terrain_model_kwargs": {
                 "terrain_size_x": 35.0,
@@ -478,6 +478,10 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         info["target_position_x"] = targte_position.x()
         info["target_position_y"] = targte_position.y()
         info["target_position_z"] = targte_position.z()
+        
+        info["target_position_x_in_world"] = self._target_position[0]
+        info["target_position_y_in_world"] = self._target_position[1]
+        info["target_position_z_in_world"] = self._target_position[2]
         
         info["chassie_rotation_x"] = euler_angle_in_under_carriage_body.x()
         info["chassie_rotation_y"] = euler_angle_in_under_carriage_body.y()

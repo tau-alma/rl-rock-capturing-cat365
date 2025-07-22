@@ -530,12 +530,21 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         reward_smoothing_control_input = self._reward_smoothing_control_input()
         reward_terminal_condition = self._reward_terminal_condition_2()
         
-        reward = reward_rock_target_x_axis+ \
+        if self._condition_terminal_condition_2():
+            reward = reward_terminal_condition
+        else:
+            reward = reward_rock_target_x_axis+ \
                 reward_rock_target_z_axis+ \
                 reward_euler_ang_under_carriage_body+ \
                 reward_control_input+ \
-                reward_smoothing_control_input+\
-                reward_terminal_condition
+                reward_smoothing_control_input
+        
+        # reward = reward_rock_target_x_axis+ \
+        #         reward_rock_target_z_axis+ \
+        #         reward_euler_ang_under_carriage_body+ \
+        #         reward_control_input+ \
+        #         reward_smoothing_control_input+\
+        #         reward_terminal_condition
         
                 
         return reward

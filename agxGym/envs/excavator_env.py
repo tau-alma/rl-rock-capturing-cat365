@@ -763,7 +763,7 @@ class ExcavatorTerrainEnv(AGXGymEnv):
         
     def _generate_random_geometry_rock(self):
         
-        rock_id = random.choice([2, 3, 6])  # randomly pick 2 or 6
+        rock_id = random.choice([2, 3])  # randomly pick 2 or 6
         # rock_id = random.randint(2, 6)  # random integer between 2 and 6 (inclusive)
         
         rock_file = f"models/convex_stones/convex_rock{rock_id}.obj"

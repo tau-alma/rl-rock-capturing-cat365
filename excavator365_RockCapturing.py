@@ -198,7 +198,7 @@ def main():
         os.makedirs(eval_log_dir, exist_ok=True)
         evaluate_env_extra_variables(venv, 
                      model.predict, 
-                     num_episodes=5,
+                     num_episodes=10,
                      save_dir=os.path.join(eval_log_dir, "evaluation_data.npz"))
     
     end_time = time.time()

@@ -5,5 +5,8 @@ __pycache__/
 *.npz
 *.png
 *.webm
+*.pdf
+*.txt
+*.json
 event.*
 events.*

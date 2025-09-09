@@ -160,7 +160,7 @@ register(
 register(
     id='agx-365-terrain-rock-v0',
     entry_point='agxGym.envs:ExcavatorTerrainEnv',
-    max_episode_steps=1000,
+    max_episode_steps=500,
     kwargs={
         "terrain_model_kwargs": {
             "terrain_size_x": 35.0,#35.0,

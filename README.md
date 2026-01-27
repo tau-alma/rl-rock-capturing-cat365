@@ -48,7 +48,7 @@ Follow these steps to set up the project on your machine.
 ### 1. Clone the repository
 
 ```bash
-git clone https://git.algoryx.se/algoryx/external/xscave/rl-rock-capturing-cat365.git
+git clone git@github.com:tau-alma/rl-rock-capturing-cat365.git
 ```
 
 ### 2. Create and activate a Conda environment

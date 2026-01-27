@@ -8,5 +8,6 @@ __pycache__/
 *.pdf
 *.txt
 *.json
+*.mkv
 event.*
 events.*

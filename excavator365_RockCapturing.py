@@ -11,6 +11,8 @@ optional arguments:
 import os
 import argparse
 import time
+import random
+import numpy as np
 import torch
 from datetime import datetime
 
@@ -48,6 +50,10 @@ def main():
                     default=False, 
                     action="store_true", 
                     help="Whether to train or evaluate. Default is evaluate.")
+    ap.add_argument("--seed",
+                    type=int,
+                    default=2026,
+                    help="Random seed for reproducible results (evaluation).")
     args = vars(ap.parse_args())
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -149,6 +155,18 @@ def main():
             save_vecnormalize=True)
 
     else:
+        # Set seeds for reproducibility
+        SEED = args["seed"]
+        os.environ["PYTHONHASHSEED"] = str(SEED)
+        random.seed(SEED)
+        np.random.seed(SEED)
+        torch.manual_seed(SEED)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(SEED)
+        # Ensure deterministic algorithms where possible
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+
         # venv = DummyVecEnv([make_env(
         #     ExcavatorTerrainEnv,
         #     wrappers=[NormalizeObsSpace, KeyBoardListenerWrapper],
@@ -159,6 +177,7 @@ def main():
         
         venv = make_vec_env(env_id=make_env(ExcavatorTerrainEnv, render_mode="human", headless=False), 
                             n_envs=1, 
+                            seed=SEED,
                             monitor_dir=eval_log_dir,
                             wrapper_class=NormalizeObsSpace,
                             vec_env_cls=DummyVecEnv)

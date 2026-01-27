@@ -34,12 +34,10 @@ project/
 ├── excavator365_RockCapturing.py       # Main script to train or test the agent
 ├── run_env.py                          # Script to manually run the environment
 ├── media/                              # Sample video and media assets for README
-├── Others/                             # Miscellaneous and legacy scripts
 ├── plot_training_data.py               # Plot training metrics from log files
 ├── plot_evaluation_data.py             # Plot test results
 ├── results/                            # Output directory for logs and model checkpoints
 ├── Rock_Bucket_initial_conditions.ods  # Initial configuration for the bucket, stick, arm
-├── TODO.md                             # TODO list
 └── README.md                           # Project overview and instructions
 ```
 
@@ -143,43 +141,6 @@ Below is a sample video demonstrating the automatic rock capturing task using tr
 
 ![Rock Capturing Demo](media/Video_Sample_Rock_Capturing.gif)
 
-## Project Roadmap & Tasks
-
-Check out the [TODO List](TODO.md) for current tasks, experiments, and development progress.
-
-
-## Contributing
-
-We welcome contributions to improve and extend this project! If you'd like to contribute via GitLab, follow these steps:
-
-1. **Clone** the repository to your local machine:
-
-   ```bash
-   git clone https://git.algoryx.se/algoryx/external/xscave/rl-rock-capturing-cat365.git
-   ```
-
-2. **Create a new branch** for your feature or fix:
-
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-3. **Develop** your changes locally. Make sure your code is clean, tested, and well-documented.
-
-4. **Commit** your changes with a clear message:
-
-   ```bash
-   git add .
-   git commit -m "Add: meaningful description of your change"
-   ```
-5. **Push** the branch to GitLab:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-6. **Create a Merge Request (MR)** targeting the main branch.
-
-7. Your MR will be reviewed. Please be responsive to feedback and update your branch as needed.
 
 ## Authors and acknowledgment
 This project is developed and maintained by:
@@ -198,4 +159,4 @@ We also thank everyone who has contributed to improving this project.
 This project is currently closed-source for internal research. Licensing terms will be defined in a future release.
 
 ## Project status
-This project is part of the research project XSCAVE (https://www.xscave.eu/). We are planning to publish our work in the Automation in Construction journal (https://www.sciencedirect.com/journal/automation-in-construction).
+This project is part of the research project XSCAVE (https://www.xscave.eu/).
